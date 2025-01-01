@@ -14,7 +14,6 @@ namespace Code.Infrastructure.Scopes
 
         protected override void Configure(IContainerBuilder builder)
         {
-            Debug.Log("Global scope is working!");
         }
     }
 }
