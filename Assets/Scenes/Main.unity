@@ -123,6 +123,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &118688824 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3533781239856290072, guid: 031b1c8b7180e5d47be9cefd7e128fd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 7768148580412349724}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -425,7 +431,8 @@ MonoBehaviour:
   parentReference:
     TypeName: 
   autoRun: 1
-  autoInjectGameObjects: []
+  autoInjectGameObjects:
+  - {fileID: 118688824}
 --- !u!1 &1954390307
 GameObject:
   m_ObjectHideFlags: 0

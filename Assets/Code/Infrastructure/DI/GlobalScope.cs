@@ -1,9 +1,10 @@
+using Code.Infrastructure.Services.InputService;
 using DG.Tweening;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Code.Infrastructure.Scopes
+namespace Code.Infrastructure.DI
 {
     public class GlobalScope : LifetimeScope
     {
@@ -16,6 +17,8 @@ namespace Code.Infrastructure.Scopes
 
         protected override void Configure(IContainerBuilder builder)
         {
+            //builder.Register<GameInputActions>(Lifetime.Singleton);
+            builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
     }
 }
