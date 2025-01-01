@@ -1,3 +1,4 @@
+using DG.Tweening;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -10,6 +11,7 @@ namespace Code.Infrastructure.Scopes
         {
             base.Awake();
             Application.targetFrameRate = 60;
+            DOTween.Init();
         }
 
         protected override void Configure(IContainerBuilder builder)
