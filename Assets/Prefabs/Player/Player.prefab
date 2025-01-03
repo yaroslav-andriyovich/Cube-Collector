@@ -61,8 +61,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 56508689548441954}
-  - component: {fileID: 7653018580117857694}
+  - component: {fileID: 578236568534010453}
   - component: {fileID: 7267567736134636847}
+  - component: {fileID: 7653018580117857694}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -87,6 +88,41 @@ Transform:
   - {fileID: 1251405539903050611}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &578236568534010453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3533781239856290072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be850303fa3144a886d0c7acdcf2d882, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cubeHolder: {fileID: 1676255251822369048}
+  _stickmanTransform: {fileID: 6321855622877312415}
+  _animator: {fileID: 6932852555289407892}
+  _jumpPower: 0.5
+  _jumpDuration: 0.4
+--- !u!114 &7267567736134636847
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3533781239856290072}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a9ff60b27dad4e5e8fce8a0aced77111, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 7653018580117857694}
+  _horizontalBoundaries:
+    min: -2
+    max: 2
+  _forwardSpeed: 11
+  _horizontalSpeed: 0.5
 --- !u!54 &7653018580117857694
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -114,24 +150,6 @@ Rigidbody:
   m_Interpolate: 1
   m_Constraints: 116
   m_CollisionDetection: 0
---- !u!114 &7267567736134636847
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3533781239856290072}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9ff60b27dad4e5e8fce8a0aced77111, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 7653018580117857694}
-  _horizontalBoundaries:
-    min: -2
-    max: 2
-  _forwardSpeed: 11
-  _horizontalSpeed: 0.5
 --- !u!1001 &2996714468567046013
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -289,6 +307,12 @@ PrefabInstance:
 --- !u!4 &6321855622877312415 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 3398173167381879572, guid: abfd5e1fd7f9eca46a00d3c3dfcefa59,
+    type: 3}
+  m_PrefabInstance: {fileID: 8688290631801892491}
+  m_PrefabAsset: {fileID: 0}
+--- !u!95 &6932852555289407892 stripped
+Animator:
+  m_CorrespondingSourceObject: {fileID: 1775951963520294687, guid: abfd5e1fd7f9eca46a00d3c3dfcefa59,
     type: 3}
   m_PrefabInstance: {fileID: 8688290631801892491}
   m_PrefabAsset: {fileID: 0}
