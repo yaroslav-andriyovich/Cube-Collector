@@ -17,7 +17,6 @@ namespace Code.Infrastructure.DI
 
         protected override void Configure(IContainerBuilder builder)
         {
-            //builder.Register<GameInputActions>(Lifetime.Singleton);
             builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
     }
