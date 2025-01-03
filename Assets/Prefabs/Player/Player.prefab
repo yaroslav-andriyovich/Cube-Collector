@@ -49,7 +49,8 @@ MonoBehaviour:
   - {fileID: 4100903095440650044}
   _stackCapacity: 8
   _stackParticle: {fileID: 3378104703656810045}
-  _collectTextPrefab: {fileID: 0}
+  _collectTextPrefab: {fileID: 7346050746580168960, guid: 52501f8c5c7ad10418be80b76674a60b,
+    type: 3}
   _playerCollisionTrigger: {fileID: 9010333263706727566}
   _vibrationMilliseconds: 15
 --- !u!1 &3533781239856290072

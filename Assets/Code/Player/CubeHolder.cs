@@ -142,7 +142,8 @@ namespace Code.Player
         private void SpawnCollectText(Vector3 at)
         {
             Vector3 worldPosition = transform.TransformPoint(at);
-            
+
+            Instantiate(_collectTextPrefab, worldPosition, Quaternion.identity);
             //NightPool.Spawn(_collectTextPrefab, worldPosition, Quaternion.identity);
         }
 
