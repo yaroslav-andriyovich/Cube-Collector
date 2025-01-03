@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Code.Cubes;
+using Code.Environment;
 using Code.Tracks;
 using UnityEngine;
 
@@ -17,12 +18,12 @@ namespace Code.Player
 
         public event Action<Vector3> NewPlayerPosition;
         
-        //private CameraShaker _cameraShaker;
+        private CameraShaker _cameraShaker;
         private TrackGenerator _trackGenerator;
 
         private void Start()
         {
-            //_cameraShaker = Camera.main.GetComponent<CameraShaker>();
+            _cameraShaker = Camera.main.GetComponent<CameraShaker>();
             _trackGenerator = FindObjectOfType<TrackGenerator>();
             _playerCollisionTrigger.DangerousCollision += ReleaseAll;
             SubscribeInitialCubes();
@@ -148,7 +149,7 @@ namespace Code.Player
         private void OnWallCollision(PickableCube owner)
         {
             RemoveCube(owner);
-            //_cameraShaker.LightShake();
+            _cameraShaker.LightShake();
             //Vibration.VibrateAndroid(_vibrationMilliseconds);
         }
 

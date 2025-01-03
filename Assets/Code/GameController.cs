@@ -1,4 +1,5 @@
 using System;
+using Code.Environment;
 using Code.Infrastructure.Services.InputService;
 using Code.Player;
 using DG.Tweening;
@@ -15,7 +16,7 @@ namespace Code
         [Space]
         [SerializeField] private PlayerMovement _movement;
         [SerializeField] private DangerousCollisionTrigger _stickmanCollisionsTrigger;
-        //[SerializeField] private CameraShaker _cameraShaker;
+        [SerializeField] private CameraShaker _cameraShaker;
         [SerializeField] private ParticleSystem _warpEffect;
         [SerializeField] private RagdollActivator _ragdollActivator;
         //[SerializeField] private UI _ui;
@@ -75,7 +76,7 @@ namespace Code
             _inputService.DisableInput();
             _ragdollActivator.Activate();
             _warpEffect.Stop();
-            //_cameraShaker.HardShake();
+            _cameraShaker.HardShake();
             //_ui.ShowRestartWindow();
         }
     }
