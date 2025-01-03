@@ -13,6 +13,7 @@ namespace Code.Infrastructure.DI
             base.Awake();
             Application.targetFrameRate = 60;
             DOTween.Init();
+            Vibration.Init();
         }
 
         protected override void Configure(IContainerBuilder builder)

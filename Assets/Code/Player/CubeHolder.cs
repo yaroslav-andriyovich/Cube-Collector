@@ -150,7 +150,7 @@ namespace Code.Player
         {
             RemoveCube(owner);
             _cameraShaker.LightShake();
-            //Vibration.VibrateAndroid(_vibrationMilliseconds);
+            Vibration.VibrateAndroid(_vibrationMilliseconds);
         }
 
         private void RemoveCube(PickableCube cube)

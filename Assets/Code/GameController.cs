@@ -30,7 +30,7 @@ namespace Code
             _stickmanCollisionsTrigger.DangerousCollision -= StopGame;
             //_ui.RestartButton -= Restart;
 
-            //Vibration.CancelAndroid();
+            Vibration.CancelAndroid();
         }
 
         [Inject]
@@ -41,8 +41,7 @@ namespace Code
             _inputService.Actions.FirstTouch.performed += OnFirstTouch;
             
             Time.timeScale = _timeScale;
-            //Vibration.Init();
-            
+
             _stickmanCollisionsTrigger.DangerousCollision += StopGame;
             //_ui.RestartButton += Restart;
         }
