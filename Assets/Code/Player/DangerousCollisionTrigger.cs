@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Code.Player
 {
-    public class DangerousCollisionDetector : MonoBehaviour
+    public class DangerousCollisionTrigger : MonoBehaviour
     {
         [SerializeField] private List<string> _tags;
         

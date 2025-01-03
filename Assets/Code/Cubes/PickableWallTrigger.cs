@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 
-namespace Code.Player.Collecting
+namespace Code.Cubes
 {
-    public class PickupWallTrigger : MonoBehaviour
+    public class PickableWallTrigger : MonoBehaviour
     {
         [SerializeField] private LayerMask _wallLayer;
         

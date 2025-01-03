@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
+using Code.Cubes;
 using Code.Tracks;
 using UnityEngine;
 
-namespace Code.Player.Collecting
+namespace Code.Player
 {
     public class CubeHolder : MonoBehaviour
     {
@@ -11,7 +12,7 @@ namespace Code.Player.Collecting
         [SerializeField, Min(0)] private int _stackCapacity;
         [SerializeField] private ParticleSystem _stackParticle;
         [SerializeField] private GameObject _collectTextPrefab;
-        [SerializeField] private DangerousCollisionDetector _playerCollisionDetector;
+        [SerializeField] private DangerousCollisionTrigger _playerCollisionTrigger;
         [SerializeField, Min(0)] private long _vibrationMilliseconds;
 
         public event Action<Vector3> NewPlayerPosition;
@@ -23,13 +24,13 @@ namespace Code.Player.Collecting
         {
             //_cameraShaker = Camera.main.GetComponent<CameraShaker>();
             _trackGenerator = FindObjectOfType<TrackGenerator>();
-            _playerCollisionDetector.DangerousCollision += ReleaseAll;
+            _playerCollisionTrigger.DangerousCollision += ReleaseAll;
             SubscribeInitialCubes();
         }
 
         private void OnDestroy()
         {
-            _playerCollisionDetector.DangerousCollision -= ReleaseAll;
+            _playerCollisionTrigger.DangerousCollision -= ReleaseAll;
             UnSubscribeAll();
         }
 

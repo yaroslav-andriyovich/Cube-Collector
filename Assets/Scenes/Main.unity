@@ -136,7 +136,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 7768148580412349724}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 118688824}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a9ff60b27dad4e5e8fce8a0aced77111, type: 3}
   m_Name: 
@@ -147,6 +147,18 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 7768148580412349724}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &118688829 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2721392864491869956, guid: 031b1c8b7180e5d47be9cefd7e128fd6,
+    type: 3}
+  m_PrefabInstance: {fileID: 7768148580412349724}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 118688824}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 316dc77009ae4c09ae0bdf9b8bc785cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -591,8 +603,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _timeScale: 1
   _movement: {fileID: 118688825}
-  _stickmanCollisionsDetector: {fileID: 1160709128}
+  _stickmanCollisionsTrigger: {fileID: 1160709128}
   _warpEffect: {fileID: 0}
+  _ragdollActivator: {fileID: 118688829}
 --- !u!1001 &3837384069398144407
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,12 +1,12 @@
 using System;
 using UnityEngine;
 
-namespace Code.Player.Collecting
+namespace Code.Cubes
 {
     public class PickableCube : MonoBehaviour
     {
         [SerializeField] private BoxCollider _boxCollider;
-        [SerializeField] private PickupWallTrigger _wallTrigger;
+        [SerializeField] private PickableWallTrigger _wallTrigger;
 
         public event Action<PickableCube> WallCollision;
         public event Action<PickableCube> OtherPickupCollision;

@@ -1,3 +1,4 @@
+using System;
 using Code.Infrastructure.Services.InputService;
 using Code.Player;
 using DG.Tweening;
@@ -13,10 +14,10 @@ namespace Code
         [SerializeField, Min(0f)] private float _timeScale;
         [Space]
         [SerializeField] private PlayerMovement _movement;
-        [SerializeField] private DangerousCollisionDetector _stickmanCollisionsDetector;
+        [SerializeField] private DangerousCollisionTrigger _stickmanCollisionsTrigger;
         //[SerializeField] private CameraShaker _cameraShaker;
         [SerializeField] private ParticleSystem _warpEffect;
-        //[SerializeField] private RagdollActivator _ragdollActivator;
+        [SerializeField] private RagdollActivator _ragdollActivator;
         //[SerializeField] private UI _ui;
 
         private InputService _inputService;
@@ -25,7 +26,7 @@ namespace Code
         private void OnDestroy()
         {
             _inputService.Actions.FirstTouch.performed -= OnFirstTouch;
-            _stickmanCollisionsDetector.DangerousCollision -= StopGame;
+            _stickmanCollisionsTrigger.DangerousCollision -= StopGame;
             //_ui.RestartButton -= Restart;
 
             //Vibration.CancelAndroid();
@@ -41,10 +42,15 @@ namespace Code
             Time.timeScale = _timeScale;
             //Vibration.Init();
             
-            _stickmanCollisionsDetector.DangerousCollision += StopGame;
+            _stickmanCollisionsTrigger.DangerousCollision += StopGame;
             //_ui.RestartButton += Restart;
         }
-        
+
+        private void Start()
+        {
+            StartGame();
+        }
+
         public void Restart() => 
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
@@ -61,16 +67,13 @@ namespace Code
 
         public void StopGame()
         {
-            Restart();
-            return;
-            
             if (_gameFailed)
                 return;
             
             _gameFailed = true;
             _movement.enabled = false;
             _inputService.DisableInput();
-            //_ragdollActivator.Activate();
+            _ragdollActivator.Activate();
             //_cameraShaker.HardShake();
             //_ui.ShowRestartWindow();
         }
