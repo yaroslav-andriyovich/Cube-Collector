@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6182535640078443381}
   - component: {fileID: 4470266650940893731}
+  - component: {fileID: 3297633948271027660}
   m_Layer: 0
   m_Name: WallTrigger
   m_TagString: Untagged
@@ -53,6 +54,21 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 0.8, y: 0.2, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &3297633948271027660
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5810223261744295505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd37d4fbae504ac38f4d1a9a40de6e13, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _wallLayer:
+    serializedVersion: 2
+    m_Bits: 64
 --- !u!1 &6247264816639475759
 GameObject:
   m_ObjectHideFlags: 0
@@ -145,12 +161,13 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2590569617558832784}
+  - component: {fileID: 1260764138389141569}
   - component: {fileID: 3247662471480115039}
   - component: {fileID: -2105967441346805290}
   - component: {fileID: 7019147388793402513}
   m_Layer: 0
   m_Name: PickableCube
-  m_TagString: Untagged
+  m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -172,6 +189,20 @@ Transform:
   - {fileID: 6182535640078443381}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1260764138389141569
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7527850806464432811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5e2baa09a255454dbae4e899bfae51d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _boxCollider: {fileID: 7019147388793402513}
+  _wallTrigger: {fileID: 3297633948271027660}
 --- !u!114 &3247662471480115039
 MonoBehaviour:
   m_ObjectHideFlags: 0

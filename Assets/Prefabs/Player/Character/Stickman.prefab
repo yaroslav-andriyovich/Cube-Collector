@@ -76,6 +76,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3398173167381879572}
   - component: {fileID: 4257036130261553825}
+  - component: {fileID: 403107425626343941}
   - component: {fileID: 8890428338985894200}
   - component: {fileID: 5841818134511681793}
   - component: {fileID: 4352340205833050997}
@@ -116,6 +117,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 5841818134511681793}
   _attraction: 18
+--- !u!114 &403107425626343941
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347689774411849422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ec01855b1a6840f2879c0995fcdb6a3e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _tags:
+  - Wall
+  - Ground
 --- !u!95 &8890428338985894200
 Animator:
   serializedVersion: 5

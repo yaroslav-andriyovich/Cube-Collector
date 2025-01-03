@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7651940118720584239}
   - component: {fileID: 5288744994219889270}
   - component: {fileID: 4899861784035722214}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -93,9 +93,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2590569617558832784}
   - component: {fileID: 7019147388793402513}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: WallCube
-  m_TagString: Untagged
+  m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 2147483647
