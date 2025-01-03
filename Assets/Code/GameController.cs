@@ -61,7 +61,7 @@ namespace Code
         {
             _inputService.Actions.FirstTouch.performed -= OnFirstTouch;
             _movement.enabled = true;
-            //_warpEffect.Play();
+            _warpEffect.Play();
             //_ui.HideStartWindow();
         }
 
@@ -74,6 +74,7 @@ namespace Code
             _movement.enabled = false;
             _inputService.DisableInput();
             _ragdollActivator.Activate();
+            _warpEffect.Stop();
             //_cameraShaker.HardShake();
             //_ui.ShowRestartWindow();
         }

@@ -88,9 +88,9 @@ namespace Code.Player
 
         private void DestroyOtherCube(PickableCube cube)
         {
-            /*_stackParticle.Stop();
+            _stackParticle.Stop();
             _stackParticle.transform.position = cube.transform.position;
-            _stackParticle.Play();*/
+            _stackParticle.Play();
             Destroy(cube.gameObject);
         }
 
@@ -133,9 +133,9 @@ namespace Code.Player
 
         private void PlayStackEffect(Vector3 at)
         {
-            /*_stackParticle.Stop();
+            _stackParticle.Stop();
             _stackParticle.transform.localPosition = at;
-            _stackParticle.Play();*/
+            _stackParticle.Play();
         }
 
         private void SpawnCollectText(Vector3 at)
