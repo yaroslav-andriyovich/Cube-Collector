@@ -1,8 +1,7 @@
-using System;
 using Code.Environment;
 using Code.Infrastructure.Services.InputService;
 using Code.Player;
-using DG.Tweening;
+using Code.UI;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
@@ -19,7 +18,7 @@ namespace Code
         [SerializeField] private CameraShaker _cameraShaker;
         [SerializeField] private ParticleSystem _warpEffect;
         [SerializeField] private RagdollActivator _ragdollActivator;
-        //[SerializeField] private UI _ui;
+        [SerializeField] private UIController _ui;
 
         private InputService _inputService;
         private bool _gameFailed;
@@ -28,7 +27,7 @@ namespace Code
         {
             _inputService.Actions.FirstTouch.performed -= OnFirstTouch;
             _stickmanCollisionsTrigger.DangerousCollision -= StopGame;
-            //_ui.RestartButton -= Restart;
+            _ui.RestartButton -= Restart;
 
             Vibration.CancelAndroid();
         }
@@ -43,12 +42,9 @@ namespace Code
             Time.timeScale = _timeScale;
 
             _stickmanCollisionsTrigger.DangerousCollision += StopGame;
-            //_ui.RestartButton += Restart;
-        }
-
-        private void Start()
-        {
-            StartGame();
+            _ui.RestartButton += Restart;
+            
+            _inputService.EnableInput();
         }
 
         public void Restart() => 
@@ -62,7 +58,7 @@ namespace Code
             _inputService.Actions.FirstTouch.performed -= OnFirstTouch;
             _movement.enabled = true;
             _warpEffect.Play();
-            //_ui.HideStartWindow();
+            _ui.HideStartWindow();
         }
 
         public void StopGame()
@@ -76,7 +72,7 @@ namespace Code
             _ragdollActivator.Activate();
             _warpEffect.Stop();
             _cameraShaker.HardShake();
-            //_ui.ShowRestartWindow();
+            _ui.ShowRestartWindow();
         }
     }
 }

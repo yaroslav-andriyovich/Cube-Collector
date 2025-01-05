@@ -17,8 +17,6 @@ namespace Code.Infrastructure.Services.InputService
             _actions = new GameInputActions().Main;
             
             _actions.TouchDelta.performed += OnTouchDelta;
-            
-            EnableInput();
         }
 
         public void EnableInput() => 
