@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using Code.Cubes;
 using Code.Environment;
+using Code.Infrastructure.Services.Vibration;
 using Code.Tracks;
 using UnityEngine;
+using VContainer;
 
 namespace Code.Player
 {
@@ -14,12 +16,13 @@ namespace Code.Player
         [SerializeField] private ParticleSystem _stackParticle;
         [SerializeField] private GameObject _collectTextPrefab;
         [SerializeField] private DangerousCollisionTrigger _playerCollisionTrigger;
-        [SerializeField, Min(0)] private long _vibrationMilliseconds;
+        [SerializeField, Min(0)] private int _vibrationMilliseconds;
 
         public event Action<Vector3> NewPlayerPosition;
-        
+
         private CameraShaker _cameraShaker;
         private TrackGenerator _trackGenerator;
+        private IVibrationService _vibrationService;
 
         private void Start()
         {
@@ -34,6 +37,10 @@ namespace Code.Player
             _playerCollisionTrigger.DangerousCollision -= ReleaseAll;
             UnSubscribeAll();
         }
+
+        [Inject]
+        private void Construct(IVibrationService vibrationService) => 
+            _vibrationService = vibrationService;
 
         private void ReleaseAll()
         {
@@ -151,7 +158,7 @@ namespace Code.Player
         {
             RemoveCube(owner);
             _cameraShaker.LightShake();
-            Vibration.VibrateAndroid(_vibrationMilliseconds);
+            _vibrationService.Vibrate(_vibrationMilliseconds);
         }
 
         private void RemoveCube(PickableCube cube)

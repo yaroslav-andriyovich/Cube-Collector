@@ -1,9 +1,10 @@
 using System;
+using Code.Infrastructure.Services.Vibration;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using VContainer.Unity;
 
-namespace Code.Infrastructure.Services.InputService
+namespace Code.Infrastructure.Services.Input
 {
     public class InputService : IInputService, IInitializable, IDisposable
     {

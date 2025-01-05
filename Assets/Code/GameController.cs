@@ -1,9 +1,8 @@
 using Code.Environment;
-using Code.Infrastructure.Services.InputService;
+using Code.Infrastructure.Services.Input;
 using Code.Player;
 using Code.UI;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 using VContainer;
 
@@ -29,14 +28,12 @@ namespace Code
             _stickmanCollisionsTrigger.DangerousCollision -= StopGame;
             _ui.RestartButton -= Restart;
 
-            Vibration.CancelAndroid();
         }
 
         [Inject]
         private void Construct(IInputService inputService)
         {
             _inputService = inputService;
-            
             _inputService.Touch += OnTouch;
             
             Time.timeScale = _timeScale;

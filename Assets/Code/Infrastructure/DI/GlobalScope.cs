@@ -1,4 +1,5 @@
-using Code.Infrastructure.Services.InputService;
+using Code.Infrastructure.Services.Input;
+using Code.Infrastructure.Services.Vibration;
 using DG.Tweening;
 using UnityEngine;
 using VContainer;
@@ -13,11 +14,11 @@ namespace Code.Infrastructure.DI
             base.Awake();
             Application.targetFrameRate = 60;
             DOTween.Init();
-            Vibration.Init();
         }
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.Register<VibrationService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces();
         }
     }
