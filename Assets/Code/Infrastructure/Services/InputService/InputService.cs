@@ -5,30 +5,37 @@ using VContainer.Unity;
 
 namespace Code.Infrastructure.Services.InputService
 {
-    public class InputService : IInitializable, IDisposable
+    public class InputService : IInputService, IInitializable, IDisposable
     {
-        public GameInputActions.MainActions Actions => _actions;
+        public event Action Touch;
         public Vector2 MovingDelta { get; private set; }
 
-        private GameInputActions.MainActions _actions;
+        private GameInputActions.MainActions _mainActions;
 
         public void Initialize()
         {
-            _actions = new GameInputActions().Main;
+            _mainActions = new GameInputActions().Main;
             
-            _actions.TouchDelta.performed += OnTouchDelta;
+            _mainActions.FirstTouch.performed += OnFirstTouch;
+            _mainActions.TouchDelta.performed += OnTouchDelta;
+        }
+
+        public void Dispose()
+        {
+            _mainActions.FirstTouch.performed -= OnFirstTouch;
+            _mainActions.TouchDelta.performed -= OnTouchDelta;
         }
 
         public void EnableInput() => 
-            _actions.Enable();
+            _mainActions.Enable();
 
         public void DisableInput() => 
-            _actions.Disable();
+            _mainActions.Disable();
 
-        public void Dispose() => 
-            _actions.TouchDelta.performed -= OnTouchDelta;
+        private void OnFirstTouch(InputAction.CallbackContext ctx) => 
+            Touch?.Invoke();
 
         private void OnTouchDelta(InputAction.CallbackContext ctx) => 
-            MovingDelta = _actions.TouchDelta.ReadValue<Vector2>();
+            MovingDelta = _mainActions.TouchDelta.ReadValue<Vector2>();
     }
 }

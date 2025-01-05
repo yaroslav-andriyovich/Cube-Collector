@@ -18,7 +18,7 @@ namespace Code.Infrastructure.DI
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces();
         }
     }
 }

@@ -20,12 +20,12 @@ namespace Code
         [SerializeField] private RagdollActivator _ragdollActivator;
         [SerializeField] private UIController _ui;
 
-        private InputService _inputService;
+        private IInputService _inputService;
         private bool _gameFailed;
 
         private void OnDestroy()
         {
-            _inputService.Actions.FirstTouch.performed -= OnFirstTouch;
+            _inputService.Touch -= OnTouch;
             _stickmanCollisionsTrigger.DangerousCollision -= StopGame;
             _ui.RestartButton -= Restart;
 
@@ -33,11 +33,11 @@ namespace Code
         }
 
         [Inject]
-        private void Construct(InputService inputService)
+        private void Construct(IInputService inputService)
         {
             _inputService = inputService;
             
-            _inputService.Actions.FirstTouch.performed += OnFirstTouch;
+            _inputService.Touch += OnTouch;
             
             Time.timeScale = _timeScale;
 
@@ -50,12 +50,15 @@ namespace Code
         public void Restart() => 
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
-        private void OnFirstTouch(InputAction.CallbackContext ctx) => 
+        private void OnTouch()
+        {
+            _inputService.Touch -= OnTouch;
+            
             StartGame();
+        }
 
         private void StartGame()
         {
-            _inputService.Actions.FirstTouch.performed -= OnFirstTouch;
             _movement.enabled = true;
             _warpEffect.Play();
             _ui.HideStartWindow();

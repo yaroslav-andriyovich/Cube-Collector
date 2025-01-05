@@ -12,7 +12,7 @@ namespace Code.Player
         [SerializeField, Min(0f)] private float _forwardSpeed;
         [SerializeField, Min(0f)] private float _horizontalSpeed;
         
-        private InputService _inputService;
+        private IInputService _inputService;
 
         private void OnEnable() => 
             _rigidbody.velocity = Vector3.forward * _forwardSpeed;
@@ -27,7 +27,7 @@ namespace Code.Player
         }
 
         [Inject]
-        private void Construct(InputService playerInput) => 
+        private void Construct(IInputService playerInput) => 
             _inputService = playerInput;
 
         private void ChangeVelocity() => 
