@@ -1,9 +1,11 @@
+using System;
+using Code.Infrastructure.Pools.Poolable;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Code.Gameplay.Cubes
+namespace Code.VFX
 {
-    public class CubeCollectionText : MonoBehaviour//, ISpawnable
+    public class CubeCollectionText : PoolableBase<CubeCollectionText>
     {
         [Header("Movement")]
         [SerializeField, Min(0f)] private float _jumpHeight;
@@ -24,7 +26,7 @@ namespace Code.Gameplay.Cubes
             OnSpawn();
         }
 
-        private void OnDestroy()
+        private void OnDisable()
         {
             transform.DOKill();
             _canvasGroup.DOKill();
@@ -47,12 +49,6 @@ namespace Code.Gameplay.Cubes
             _canvasGroup
                 .DOFade(_endTransparencyValue, _transparencyDuration)
                 .SetEase(_transparencyEase)
-                .OnComplete(Despawn);
-
-        private void Despawn()
-        {
-            Destroy(gameObject);
-            //NightPool.Despawn(gameObject);
-        }
+                .OnComplete(Release);
     }
 }

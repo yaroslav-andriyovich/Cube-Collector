@@ -1,4 +1,5 @@
 using Code.Gameplay.Environment;
+using Code.Infrastructure.Services.Pools;
 using Code.StaticData;
 using UnityEngine;
 using VContainer;
@@ -14,6 +15,7 @@ namespace Code.Infrastructure.Scopes
         {
             builder.RegisterInstance(_cameraConfig);
             builder.Register<CameraShaker>(Lifetime.Singleton);
+            builder.Register<PoolService>(Lifetime.Singleton);
         }
     }
 }

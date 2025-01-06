@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using Code.Gameplay.Cubes;
 using Code.Gameplay.Environment;
 using Code.Gameplay.Tracks;
+using Code.Infrastructure.Pools;
+using Code.Infrastructure.Services.Pools;
 using Code.Infrastructure.Services.Vibration;
+using Code.VFX;
 using UnityEngine;
 using VContainer;
 
@@ -14,7 +17,7 @@ namespace Code.Player
         [SerializeField] private List<PickableCube> _stack;
         [SerializeField, Min(0)] private int _stackCapacity;
         [SerializeField] private ParticleSystem _stackParticle;
-        [SerializeField] private GameObject _collectTextPrefab;
+        [SerializeField] private CubeCollectionText _collectTextPrefab;
         [SerializeField] private DangerousCollisionTrigger _playerCollisionTrigger;
         [SerializeField, Min(0)] private int _vibrationMilliseconds;
 
@@ -23,6 +26,7 @@ namespace Code.Player
         private CameraShaker _cameraShaker;
         private TrackGenerator _trackGenerator;
         private IVibrationService _vibrationService;
+        private MonoPool<CubeCollectionText> _collectTextPool;
 
         private void Start()
         {
@@ -38,10 +42,11 @@ namespace Code.Player
         }
 
         [Inject]
-        private void Construct(IVibrationService vibrationService, CameraShaker cameraShaker)
+        private void Construct(IVibrationService vibrationService, CameraShaker cameraShaker, PoolService poolService)
         {
             _vibrationService = vibrationService;
             _cameraShaker = cameraShaker;
+            _collectTextPool = poolService.CreatePool(_collectTextPrefab, 3);
         }
 
         private void ReleaseAll()
@@ -152,8 +157,7 @@ namespace Code.Player
         {
             Vector3 worldPosition = transform.TransformPoint(at);
 
-            Instantiate(_collectTextPrefab, worldPosition, Quaternion.identity);
-            //NightPool.Spawn(_collectTextPrefab, worldPosition, Quaternion.identity);
+            _collectTextPool.Get(worldPosition, Quaternion.identity);
         }
 
         private void OnWallCollision(PickableCube owner)
