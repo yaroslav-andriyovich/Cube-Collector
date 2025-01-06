@@ -1,25 +1,19 @@
 using System.Collections.Generic;
+using Code.StaticData;
 using DG.Tweening;
 using UnityEngine;
+using VContainer;
 
 namespace Code.Gameplay.Tracks
 {
-    public class TrackGenerator : MonoBehaviour
+    public class TrackSpawner : MonoBehaviour
     {
-        [Header("Initial")]
         [SerializeField] private GameObject _playerTrackInstance;
-        [SerializeField] private GameObject[] _trackVariants;
-        [SerializeField, Min(0)] private int _initialCount;
-
-        [Header("Spawning")]
-        [SerializeField, Min(0f)] private float _downwardPositionShift;
-        [SerializeField, Min(0f)] private float _forwardPositionShift;
-        [SerializeField, Min(0f)] private float _animationDuration;
-        [SerializeField] private Ease _animationEase;
 
         private GameObject FirstSpawned => _spawned[0];
         private GameObject LastSpawned => _spawned[^1];
 
+        private TrackSpawningConfig _config;
         private List<GameObject> _spawned;
         private List<GameObject> _markedToDestroy;
 
@@ -28,6 +22,10 @@ namespace Code.Gameplay.Tracks
             Initialize();
             InstantiateInitialTracks();
         }
+
+        [Inject]
+        private void Construct(TrackSpawningConfig config) => 
+            _config = config;
 
         public void GenerateNext()
         {
@@ -52,7 +50,7 @@ namespace Code.Gameplay.Tracks
 
         private void InstantiateInitialTracks()
         {
-            for (int i = 0; i < _initialCount; i++)
+            for (int i = 0; i < _config.initialCount; i++)
             {
                 Vector3 position = LastSpawned.transform.position;
 
@@ -64,7 +62,7 @@ namespace Code.Gameplay.Tracks
 
         private Vector3 ShiftPositionForward(Vector3 position)
         {
-            position.z += _forwardPositionShift;
+            position.z += _config.forwardPositionShift;
             return position;
         }
 
@@ -80,9 +78,9 @@ namespace Code.Gameplay.Tracks
         private GameObject GetRandomPrefab()
         {
             int startIndex = 0;
-            int endIndex = _trackVariants.Length;
+            int endIndex = _config.trackVariants.Length;
             int randomIndex = Random.Range(startIndex, endIndex);
-            GameObject randomTrack = _trackVariants[randomIndex];
+            GameObject randomTrack = _config.trackVariants[randomIndex];
 
             return randomTrack;
         }
@@ -99,7 +97,7 @@ namespace Code.Gameplay.Tracks
 
         private Vector3 ShiftPositionDown(Vector3 position)
         {
-            position.y = -_downwardPositionShift;
+            position.y = -_config.downwardPositionShift;
             return position;
         }
 
@@ -108,8 +106,8 @@ namespace Code.Gameplay.Tracks
             float targetPosition = FirstSpawned.transform.position.y;
 
             track.transform
-                .DOMoveY(targetPosition, _animationDuration)
-                .SetEase(_animationEase)
+                .DOMoveY(targetPosition, _config.animationDuration)
+                .SetEase(_config.animationEase)
                 .OnComplete(CollectGarbage);
         }
 

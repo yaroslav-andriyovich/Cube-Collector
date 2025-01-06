@@ -24,13 +24,13 @@ namespace Code.Player
         public event Action<Vector3> NewPlayerPosition;
 
         private CameraShaker _cameraShaker;
-        private TrackGenerator _trackGenerator;
+        private TrackSpawner _trackSpawner;
         private IVibrationService _vibrationService;
         private MonoPool<CubeCollectionText> _collectTextPool;
 
         private void Start()
         {
-            _trackGenerator = FindObjectOfType<TrackGenerator>();
+            _trackSpawner = FindObjectOfType<TrackSpawner>();
             _playerCollisionTrigger.DangerousCollision += ReleaseAll;
             SubscribeInitialCubes();
         }
@@ -176,7 +176,7 @@ namespace Code.Player
             UnSubscribeCube(cube);
             _stack.Remove(cube);
             RemoveCubeParent(cube);
-            _trackGenerator.MarkToGarbageCollector(cube.gameObject);
+            _trackSpawner.MarkToGarbageCollector(cube.gameObject);
         }
 
         private void RemoveCubeParent(PickableCube cube) => 

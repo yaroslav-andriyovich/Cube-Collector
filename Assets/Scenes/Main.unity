@@ -1495,6 +1495,8 @@ MonoBehaviour:
   - {fileID: 118688824}
   - {fileID: 2130015886}
   _cameraConfig: {fileID: 11400000, guid: 04de168cdcea31843a6f5d08687e227a, type: 2}
+  _trackSpawningConfig: {fileID: 11400000, guid: cf09edbfab7937e418332fdc06e48b35,
+    type: 2}
 --- !u!1 &1962889006
 GameObject:
   m_ObjectHideFlags: 0

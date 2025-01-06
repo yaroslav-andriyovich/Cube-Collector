@@ -22,9 +22,9 @@ namespace Code.Gameplay.Tracks
 
         private void InvokeTrackGenerator()
         {
-            TrackGenerator trackGenerator = FindObjectOfType<TrackGenerator>();
+            TrackSpawner trackSpawner = FindObjectOfType<TrackSpawner>();
 
-            trackGenerator.GenerateNext();
+            trackSpawner.GenerateNext();
         }
     }
 }
