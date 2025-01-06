@@ -5,7 +5,7 @@ using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Code.Infrastructure.DI
+namespace Code.Infrastructure.Scopes
 {
     public class GlobalScope : LifetimeScope
     {
@@ -18,6 +18,7 @@ namespace Code.Infrastructure.DI
 
         protected override void Configure(IContainerBuilder builder)
         {
+            builder.Register<SceneLoader>(Lifetime.Singleton);
             builder.Register<VibrationService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces();
         }

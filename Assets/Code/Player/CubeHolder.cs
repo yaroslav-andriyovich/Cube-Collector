@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Code.Cubes;
-using Code.Environment;
+using Code.Gameplay.Cubes;
+using Code.Gameplay.Environment;
+using Code.Gameplay.Tracks;
 using Code.Infrastructure.Services.Vibration;
-using Code.Tracks;
 using UnityEngine;
 using VContainer;
 
@@ -26,7 +26,6 @@ namespace Code.Player
 
         private void Start()
         {
-            _cameraShaker = Camera.main.GetComponent<CameraShaker>();
             _trackGenerator = FindObjectOfType<TrackGenerator>();
             _playerCollisionTrigger.DangerousCollision += ReleaseAll;
             SubscribeInitialCubes();
@@ -39,8 +38,11 @@ namespace Code.Player
         }
 
         [Inject]
-        private void Construct(IVibrationService vibrationService) => 
+        private void Construct(IVibrationService vibrationService, CameraShaker cameraShaker)
+        {
             _vibrationService = vibrationService;
+            _cameraShaker = cameraShaker;
+        }
 
         private void ReleaseAll()
         {

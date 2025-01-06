@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace Code.Cubes
+namespace Code.Gameplay.Cubes
 {
     public class PickableWallTrigger : MonoBehaviour
     {

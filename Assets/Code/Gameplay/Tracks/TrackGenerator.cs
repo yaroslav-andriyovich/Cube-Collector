@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Code.Tracks
+namespace Code.Gameplay.Tracks
 {
     public class TrackGenerator : MonoBehaviour
     {

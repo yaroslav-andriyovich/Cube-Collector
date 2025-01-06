@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Code.Cubes
+namespace Code.Gameplay.Cubes
 {
     public class CubeCollectionText : MonoBehaviour//, ISpawnable
     {

@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Code.Physics;
+using Code.Gameplay.Physics;
 using UnityEngine;
 
 namespace Code.Player
