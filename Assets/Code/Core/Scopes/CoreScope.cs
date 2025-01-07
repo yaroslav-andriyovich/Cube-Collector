@@ -1,13 +1,13 @@
-using Code.Infrastructure.Services.Input;
-using Code.Infrastructure.Services.Vibration;
+using Code.Core.Services.Input;
+using Code.Core.Services.Vibration;
 using DG.Tweening;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Code.Infrastructure.Scopes
+namespace Code.Core.Scopes
 {
-    public class GlobalScope : LifetimeScope
+    public class CoreScope : LifetimeScope
     {
         protected override void Awake()
         {

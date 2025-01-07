@@ -1,5 +1,5 @@
 using System;
-using Code.Infrastructure.Services.Input;
+using Code.Core.Services.Input;
 using UnityEngine;
 using VContainer;
 

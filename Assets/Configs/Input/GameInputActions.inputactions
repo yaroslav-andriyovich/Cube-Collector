@@ -1,23 +1,23 @@
 {
-    "name": "PlayerInput",
+    "name": "GameInputActions",
     "maps": [
         {
             "name": "Main",
-            "id": "7de54e19-e969-46ed-a06d-a23d27900c6e",
+            "id": "d7ed23bc-02b3-4c9d-9b21-b4693b226a0c",
             "actions": [
                 {
                     "name": "FirstTouch",
                     "type": "Button",
-                    "id": "a0447d34-6f06-443f-b38b-75fc192f39f4",
+                    "id": "c1fd3ab6-648f-4cd1-9857-5100e3d99557",
                     "expectedControlType": "Button",
                     "processors": "",
-                    "interactions": "Press",
+                    "interactions": "",
                     "initialStateCheck": false
                 },
                 {
                     "name": "TouchDelta",
                     "type": "PassThrough",
-                    "id": "fdbb9431-cc11-464b-8dd6-9d57539a1390",
+                    "id": "52799365-2dcf-420d-a37e-6f7a6ef69145",
                     "expectedControlType": "Vector2",
                     "processors": "",
                     "interactions": "",
@@ -27,7 +27,7 @@
             "bindings": [
                 {
                     "name": "",
-                    "id": "1359c903-a97c-44f5-ac11-912515d5e1bc",
+                    "id": "f190f08e-eeb1-48e6-a28a-0f7bd97438e5",
                     "path": "<Touchscreen>/primaryTouch/press",
                     "interactions": "",
                     "processors": "",
@@ -38,7 +38,7 @@
                 },
                 {
                     "name": "",
-                    "id": "e89ef489-f9c4-4396-8e9c-7309c41d328d",
+                    "id": "5a547d1f-984f-41b0-a40c-d7585f5b866b",
                     "path": "<Mouse>/leftButton",
                     "interactions": "",
                     "processors": "",
@@ -49,7 +49,7 @@
                 },
                 {
                     "name": "",
-                    "id": "dce48071-dc4a-4e7d-a827-52e90d2484ec",
+                    "id": "efc4d360-d57c-4c2e-8f0b-94f6a60fafd2",
                     "path": "<Touchscreen>/delta",
                     "interactions": "",
                     "processors": "",
@@ -60,7 +60,7 @@
                 },
                 {
                     "name": "",
-                    "id": "0270bd42-34c0-4ebc-ba3c-cff2dc70b7ad",
+                    "id": "82bb13aa-69cb-4642-9a7a-0d644235d736",
                     "path": "<Mouse>/delta",
                     "interactions": "",
                     "processors": "",

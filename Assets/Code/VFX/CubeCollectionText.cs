@@ -1,5 +1,5 @@
 using System;
-using Code.Infrastructure.Pools.Poolable;
+using Code.Core.Pools.Poolable;
 using DG.Tweening;
 using UnityEngine;
 
@@ -22,8 +22,7 @@ namespace Code.VFX
         private void OnEnable()
         {
             ResetCanvasAlpha();
-
-            OnSpawn();
+            OnSpawned();
         }
 
         private void OnDisable()
@@ -32,7 +31,7 @@ namespace Code.VFX
             _canvasGroup.DOKill();
         }
 
-        public void OnSpawn() => 
+        public void OnSpawned() => 
             PlayJump();
 
         private void ResetCanvasAlpha() => 

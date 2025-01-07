@@ -1,13 +1,13 @@
+using Code.Core.Services.Pools;
 using Code.Gameplay.Environment;
-using Code.Infrastructure.Services.Pools;
 using Code.StaticData;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Code.Infrastructure.Scopes
+namespace Code.Core.Scopes
 {
-    public class MainSceneScope : LifetimeScope
+    public class LevelScope : LifetimeScope
     {
         [SerializeField] private CameraConfig _cameraConfig;
         [SerializeField] private TrackSpawningConfig _trackSpawningConfig;
@@ -18,7 +18,7 @@ namespace Code.Infrastructure.Scopes
             builder.RegisterInstance(_trackSpawningConfig);
             
             builder.Register<CameraShaker>(Lifetime.Singleton);
-            builder.Register<PoolService>(Lifetime.Singleton);
+            builder.Register<PoolService>(Lifetime.Scoped);
         }
     }
 }

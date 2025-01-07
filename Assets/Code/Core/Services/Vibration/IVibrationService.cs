@@ -1,4 +1,4 @@
-namespace Code.Infrastructure.Services.Vibration
+namespace Code.Core.Services.Vibration
 {
     public interface IVibrationService
     {

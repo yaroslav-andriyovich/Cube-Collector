@@ -2,7 +2,7 @@ using System;
 using DG.Tweening;
 using UnityEngine;
 
-namespace Code.Infrastructure.Pools.Poolable
+namespace Code.Core.Pools.Poolable
 {
     public abstract class PoolableBase<T> : MonoBehaviour, IPoolable<T> where T : PoolableBase<T>
     {

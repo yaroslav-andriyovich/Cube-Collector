@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Code.Core.Pools;
+using Code.Core.Services.Pools;
+using Code.Core.Services.Vibration;
 using Code.Gameplay.Cubes;
 using Code.Gameplay.Environment;
 using Code.Gameplay.Tracks;
-using Code.Infrastructure.Pools;
-using Code.Infrastructure.Services.Pools;
-using Code.Infrastructure.Services.Vibration;
 using Code.VFX;
 using UnityEngine;
 using VContainer;
@@ -46,7 +46,9 @@ namespace Code.Player
         {
             _vibrationService = vibrationService;
             _cameraShaker = cameraShaker;
-            _collectTextPool = poolService.CreatePool(_collectTextPrefab, 3);
+
+            _collectTextPool = poolService.CreatePool(_collectTextPrefab, 3, false);
+            _collectTextPool.Warmup(5);
         }
 
         private void ReleaseAll()

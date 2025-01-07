@@ -1,6 +1,6 @@
 using System;
 
-namespace Code.Infrastructure.Pools.Poolable
+namespace Code.Core.Pools.Poolable
 {
     public interface IPoolable
     {

@@ -1,5 +1,5 @@
+using Code.Core.Services.Input;
 using Code.Gameplay.Environment;
-using Code.Infrastructure.Services.Input;
 using Code.Player;
 using Code.UI;
 using UnityEngine;

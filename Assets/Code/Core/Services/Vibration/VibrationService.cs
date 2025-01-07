@@ -1,7 +1,7 @@
 using System;
 using VContainer.Unity;
 
-namespace Code.Infrastructure.Services.Vibration
+namespace Code.Core.Services.Vibration
 {
     public class VibrationService : IVibrationService, IInitializable, IDisposable
     {
