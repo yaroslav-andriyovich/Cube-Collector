@@ -47,8 +47,8 @@ namespace Code.Player
             _vibrationService = vibrationService;
             _cameraShaker = cameraShaker;
 
-            _collectTextPool = poolService.CreatePool(_collectTextPrefab, 3, false);
-            _collectTextPool.Warmup(5);
+            _collectTextPool = poolService.CreatePool(_collectTextPrefab);
+            _collectTextPool.Warmup(3);
         }
 
         private void ReleaseAll()

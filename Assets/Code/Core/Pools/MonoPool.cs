@@ -87,7 +87,12 @@ namespace Code.Core.Pools
         public void Warmup(int count)
         {
             for (int i = 0; i < count; i++)
+            {
+                if (!CanCreateNewObject())
+                    break; 
+                
                 CreateObject();
+            }
         }
 
         private void CreateObjectsParent()
@@ -107,13 +112,16 @@ namespace Code.Core.Pools
 
             _availableObjects.Push(createdObject);
             ++_currentSize;
+            
             return createdObject;
         }
 
         private T GetAvailableObject()
         {
             T element = _availableObjects.Pop();
+            
             element.gameObject.SetActive(true);
+            
             return element;
         }
 
