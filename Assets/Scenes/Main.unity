@@ -1922,6 +1922,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _playerTrackInstance: {fileID: 1407578147}
+  _pickableCubePrefab: {fileID: 1260764138389141569, guid: 301b9405d8c909a428728d02529b4021,
+    type: 3}
 --- !u!4 &2130015888
 Transform:
   m_ObjectHideFlags: 0

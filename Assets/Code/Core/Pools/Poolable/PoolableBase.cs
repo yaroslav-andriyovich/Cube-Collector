@@ -11,8 +11,16 @@ namespace Code.Core.Pools.Poolable
         void IPoolable<T>.Initialize(Action<T> returnAction) => 
             _returnToPool = returnAction;
 
-        public void Release() => 
-            _returnToPool((T)this);
+        public void Release()
+        {
+            if (_returnToPool != null)
+            {
+                _returnToPool((T)this);
+                return;
+            }
+            
+            Destroy(gameObject);
+        }
 
         protected void Release(float delay) => 
             DOVirtual.DelayedCall(delay, Release, ignoreTimeScale: false);

@@ -1,3 +1,4 @@
+using Code.Gameplay.Tracks;
 using DG.Tweening;
 using UnityEngine;
 
@@ -8,7 +9,7 @@ namespace Code.StaticData
     {
         [Header("Initial")]
         //public GameObject playerTrackInstance;
-        public GameObject[] trackVariants;
+        public Track[] trackVariants;
         [Min(0)] public int initialCount;
 
         [Header("Spawning")]

@@ -1,29 +1,37 @@
 using System;
+using Code.Core.Pools.Poolable;
 using UnityEngine;
 
 namespace Code.Gameplay.Cubes
 {
-    public class PickableCube : MonoBehaviour
+    public class PickableCube : PoolableBase<PickableCube>
     {
         [SerializeField] private BoxCollider _boxCollider;
         [SerializeField] private PickableWallTrigger _wallTrigger;
 
         public event Action<PickableCube> WallCollision;
-        public event Action<PickableCube> OtherPickupCollision;
+        public event Action<PickableCollisionData> CollisionWithDropped;
+        public event Action<PickableCube> PickedUp;
         public float Height => _boxCollider.size.y;
-        public bool IsPickable { get; set; }
-        
-        private const string PickupTag = "Pickable";
+        public bool IsPickedUp { get; private set; }
 
-        private void Start()
-        {
+        private void Start() => 
             _wallTrigger.WallCollision += CheckNearWall;
-            
-            IsPickable = true;
-        }
+
+        private void OnEnable() => 
+            IsPickedUp = false;
 
         private void OnDestroy() => 
             _wallTrigger.WallCollision -= CheckNearWall;
+
+        public void PickUp()
+        {
+            if (IsPickedUp)
+                return;
+            
+            PickedUp?.Invoke(this);
+            IsPickedUp = true;
+        }
 
         private void CheckNearWall(Collider wall)
         {
@@ -56,14 +64,16 @@ namespace Code.Gameplay.Cubes
 
         private void OnCollisionEnter(Collision collision)
         {
-            if (!IsPickable)
-                return;
-
-            if (HasPickupTag(collision) 
-                && HasPickupComponent(collision, out PickableCube cube) 
-                && cube.IsPickable)
+            if (HasPickableComponent(collision, out PickableCube cube) 
+                && IsPickedUp && !cube.IsPickedUp)
             {
-                OtherPickupCollision?.Invoke(cube);
+                PickableCollisionData collisionData = new PickableCollisionData
+                {
+                    owner = this,
+                    other = cube
+                };
+
+                CollisionWithDropped?.Invoke(collisionData);
             }
         }
 
@@ -74,10 +84,13 @@ namespace Code.Gameplay.Cubes
             WallCollision?.Invoke(this);
         }
 
-        private bool HasPickupTag(Collision collision) => 
-            collision.gameObject.CompareTag(PickupTag);
+        private bool HasPickableComponent(Collision collision, out PickableCube pickableCube) => 
+            collision.transform.TryGetComponent(out pickableCube);
+    }
 
-        private bool HasPickupComponent(Collision collision, out PickableCube pickableCube) => 
-            collision.transform.TryGetComponent<PickableCube>(out pickableCube);
+    public class PickableCollisionData
+    {
+        public PickableCube owner;
+        public PickableCube other;
     }
 }

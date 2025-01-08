@@ -1,21 +1,31 @@
 using System.Collections.Generic;
+using Code.Core.Pools;
+using Code.Core.Services.Pools;
+using Code.Gameplay.Cubes;
 using Code.StaticData;
 using DG.Tweening;
 using UnityEngine;
 using VContainer;
+using VContainer.Unity;
 
 namespace Code.Gameplay.Tracks
 {
-    public class TrackSpawner : MonoBehaviour
+    public class TrackSpawner : MonoBehaviour, IInitializable
     {
         [SerializeField] private GameObject _playerTrackInstance;
+        [SerializeField] private PickableCube _pickableCubePrefab;
 
         private GameObject FirstSpawned => _spawned[0];
         private GameObject LastSpawned => _spawned[^1];
 
         private TrackSpawningConfig _config;
         private List<GameObject> _spawned;
-        private List<GameObject> _markedToDestroy;
+        private List<PickableCube> _markedToDestroy;
+        
+        private PoolService _poolService;
+        private MonoPool<PickableCube> _pickablesPool;
+        private List<PickableCube> _spawnedPickables;
+        private IObjectResolver _objectResolver;
 
         private void Awake()
         {
@@ -24,8 +34,27 @@ namespace Code.Gameplay.Tracks
         }
 
         [Inject]
-        private void Construct(TrackSpawningConfig config) => 
+        private void Construct(TrackSpawningConfig config, PoolService poolService, IObjectResolver objectResolver)
+        {
             _config = config;
+            _poolService = poolService;
+            _objectResolver = objectResolver;
+        }
+
+        public void Initialize()
+        {
+            _spawned = new List<GameObject>
+            {
+                _playerTrackInstance
+            };
+
+            _spawnedPickables = new List<PickableCube>();
+
+            _markedToDestroy = new List<PickableCube>();
+            
+            _pickablesPool = _poolService.CreatePool(_pickableCubePrefab);
+            _pickablesPool.Warmup(20);
+        }
 
         public void GenerateNext()
         {
@@ -35,18 +64,8 @@ namespace Code.Gameplay.Tracks
             AnimateLift(spawnedTrack);
         }
 
-        public void MarkToGarbageCollector(GameObject objectToDestroy) =>
-            _markedToDestroy.Add(objectToDestroy);
-
-        private void Initialize()
-        {
-            _spawned = new List<GameObject>
-            {
-                _playerTrackInstance
-            };
-
-            _markedToDestroy = new List<GameObject>();
-        }
+        public void MarkUnusedPickable(PickableCube cube) =>
+            _markedToDestroy.Add(cube);
 
         private void InstantiateInitialTracks()
         {
@@ -69,7 +88,7 @@ namespace Code.Gameplay.Tracks
         private GameObject InstantiateRandomPrefab(Vector3 at)
         {
             GameObject prefab = GetRandomPrefab();
-            GameObject track = Instantiate(prefab, at, Quaternion.identity);
+            GameObject track = _objectResolver.Instantiate(prefab, at, Quaternion.identity);
 
             _spawned.Add(track);
             return track;
@@ -80,7 +99,7 @@ namespace Code.Gameplay.Tracks
             int startIndex = 0;
             int endIndex = _config.trackVariants.Length;
             int randomIndex = Random.Range(startIndex, endIndex);
-            GameObject randomTrack = _config.trackVariants[randomIndex];
+            GameObject randomTrack = _config.trackVariants[randomIndex].gameObject;
 
             return randomTrack;
         }
@@ -114,7 +133,7 @@ namespace Code.Gameplay.Tracks
         private void CollectGarbage()
         {
             DestroyTraveledTrack();
-            DestroyOtherGarbage();
+            ReleaseUnusedPickables();
         }
 
         private void DestroyTraveledTrack()
@@ -125,10 +144,10 @@ namespace Code.Gameplay.Tracks
             Destroy(traveledTrack);
         }
 
-        private void DestroyOtherGarbage()
+        private void ReleaseUnusedPickables()
         {
-            foreach (GameObject garbage in _markedToDestroy)
-                Destroy(garbage);
+            foreach (PickableCube cube in _markedToDestroy)
+                cube.Release();
 
             _markedToDestroy.Clear();
         }

@@ -69,7 +69,7 @@ namespace Code.Core.Pools
         public void ReturnToPool(T element)
         {
             if (_availableObjects.Contains(element))
-                throw new Exception("This object is already in the pool.");
+                return;
 
             if (CanReturnObjectToPool())
             {

@@ -55,12 +55,17 @@ namespace Code.Player
         {
             for (int i = 0; i < _stack.Count; i++)
                 RemoveCube(_stack[i]);
+            
+            _stack.Clear();
         }
 
         private void SubscribeInitialCubes()
         {
             foreach (PickableCube cube in _stack)
+            {
                 SubscribeCube(cube);
+                cube.PickUp();
+            }
         }
 
         private void UnSubscribeAll()
@@ -71,51 +76,49 @@ namespace Code.Player
 
         private void SubscribeCube(PickableCube cube)
         {
-            cube.OtherPickupCollision += OnPickupCollision;
+            cube.CollisionWithDropped += OnCollisionWithDropped;
             cube.WallCollision += OnWallCollision;
         }
         
         private void UnSubscribeCube(PickableCube cube)
         {
-            cube.OtherPickupCollision -= OnPickupCollision;
+            cube.CollisionWithDropped -= OnCollisionWithDropped;
             cube.WallCollision -= OnWallCollision;
         }
 
-        private void OnPickupCollision(PickableCube other)
+        private void OnCollisionWithDropped(PickableCollisionData collisionData)
         {
-            if (IsStackOverflow(other))
+            if (CollisionIsRegistered(collisionData.other))
                 return;
 
-            AddCube(other);
-        }
-
-        private bool IsStackOverflow(PickableCube cube)
-        {
-            bool isStackFull = _stack.Count >= _stackCapacity;
-            bool isOtherCube = !CollisionIsRegistered(cube);
-            
-            if (isStackFull && isOtherCube)
+            if (IsStackOverflow())
             {
-                DestroyOtherCube(cube);
-                return true;
+                DestroyOtherCube(collisionData.other);
+                return;
             }
 
-            return false;
+            AddCube(collisionData.other);
         }
+
+        private bool IsStackOverflow() => 
+            _stack.Count >= _stackCapacity;
 
         private void DestroyOtherCube(PickableCube cube)
         {
             _stackParticle.Stop();
             _stackParticle.transform.position = cube.transform.position;
             _stackParticle.Play();
-            Destroy(cube.gameObject);
+
+            cube.PickUp();
+            cube.Release();
         }
 
         private void AddCube(PickableCube cube)
         {
             if (CollisionIsRegistered(cube))
                 return;
-            
+
+            cube.PickUp();
             _stack.Add(cube);
             SubscribeCube(cube);
             MakeCubeAsChildren(cube);
@@ -171,14 +174,14 @@ namespace Code.Player
 
         private void RemoveCube(PickableCube cube)
         {
-            if (!CollisionIsRegistered(cube))
+            if (cube == null || !CollisionIsRegistered(cube))
                 return;
 
-            cube.IsPickable = false;
             UnSubscribeCube(cube);
             _stack.Remove(cube);
             RemoveCubeParent(cube);
-            _trackSpawner.MarkToGarbageCollector(cube.gameObject);
+            
+            _trackSpawner.MarkUnusedPickable(cube);
         }
 
         private void RemoveCubeParent(PickableCube cube) => 
