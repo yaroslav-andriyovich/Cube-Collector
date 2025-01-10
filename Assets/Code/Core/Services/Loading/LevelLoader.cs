@@ -1,10 +1,10 @@
 using UnityEngine.SceneManagement;
 
-namespace Code
+namespace Code.Core.Services.Loading
 {
-    public class SceneLoader
+    public class LevelLoader
     {
-        public void RestartCurrent() => 
+        public void ReloadCurrent() => 
             SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }

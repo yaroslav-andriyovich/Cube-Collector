@@ -74,8 +74,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3398173167381879572}
-  - component: {fileID: 4257036130261553825}
+  - component: {fileID: 4971091047871012321}
+  - component: {fileID: 5526278742425972186}
   - component: {fileID: 403107425626343941}
+  - component: {fileID: 4257036130261553825}
   - component: {fileID: 5841818134511681793}
   - component: {fileID: 4352340205833050997}
   m_Layer: 0
@@ -101,7 +103,7 @@ Transform:
   - {fileID: 1410269544254271614}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4257036130261553825
+--- !u!114 &4971091047871012321
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,11 +112,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 347689774411849422}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a7093931d5c64de7b9d01c49f3e25846, type: 3}
+  m_Script: {fileID: 11500000, guid: a5409d8238b84d53a9009146052486e0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _rigidbody: {fileID: 5841818134511681793}
-  _attraction: 18
+  _characterTransform: {fileID: 3398173167381879572}
+  _animator: {fileID: 1775951963520294687}
+  _jumpPower: 1
+  _jumpDuration: 0.4
+--- !u!114 &5526278742425972186
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347689774411849422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 316dc77009ae4c09ae0bdf9b8bc785cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _animator: {fileID: 1775951963520294687}
+  _characterColliders:
+  - {fileID: 840365193285429625}
+  - {fileID: 6422363704244453695}
+  - {fileID: 3728003239605499612}
+  - {fileID: 7827840855003709410}
+  - {fileID: 1338635141699777329}
+  - {fileID: 6793100568104108605}
+  - {fileID: 3765506367941969176}
+  - {fileID: 4297757594344452306}
+  - {fileID: 8948258672482287340}
+  - {fileID: 6024811400316547085}
+  - {fileID: 1496252785214299098}
+  _characterRigidbodyGroup:
+  - {fileID: 501299419985208746}
+  - {fileID: 2938269483891497600}
+  - {fileID: 7460337814773876408}
+  - {fileID: 3434032410546173933}
+  - {fileID: 7901982304780371610}
+  - {fileID: 5681609453880242630}
+  - {fileID: 6550890645457098233}
+  - {fileID: 6452211718942000207}
+  - {fileID: 5078022473456440836}
+  - {fileID: 2201770088086513753}
+  - {fileID: 4832877251811151261}
+  _colliderForMovement: {fileID: 4352340205833050997}
+  _gravityBooster: {fileID: 4257036130261553825}
 --- !u!114 &403107425626343941
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,6 +173,20 @@ MonoBehaviour:
   _tags:
   - Wall
   - Ground
+--- !u!114 &4257036130261553825
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 347689774411849422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a7093931d5c64de7b9d01c49f3e25846, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _rigidbody: {fileID: 5841818134511681793}
+  _attraction: 18
 --- !u!54 &5841818134511681793
 Rigidbody:
   m_ObjectHideFlags: 0

@@ -1,53 +1,71 @@
-using DG.Tweening;
+using Code.Gameplay.Services.GameControl;
+using Code.VFX;
 using UnityEngine;
+using VContainer;
 
 namespace Code.Player
 {
     public class PlayerController : MonoBehaviour
     {
+        [SerializeField] private PlayerMovementController _movement;
         [SerializeField] private CubeHolder _cubeHolder;
-        [SerializeField] private Transform _stickmanTransform;
-        [SerializeField] private Animator _animator;
-        [SerializeField, Min(0f)] private float _jumpPower;
-        [SerializeField, Min(0f)] private float _jumpDuration;
+        [SerializeField] private CharacterJumpController _characterJump;
+        [SerializeField] private DangerousCollisionTrigger _dangerousCollisionTrigger;
+        [SerializeField] private CharacterRagdollController _characterRagdollController;
+        [SerializeField] private TrailEffect _trailEffect;
 
-        private static readonly int JumpTrigger = Animator.StringToHash("Jump");
-        private const int NumJumps = 0;
+        private bool _isDead;
+        private IGameControl _gameControl;
 
-        private Tween _jumpTween;
-
-        private void Awake() => 
-            _cubeHolder.NewPlayerPosition += OnNewPlayerPosition;
+        private void Awake()
+        {
+            _dangerousCollisionTrigger.Collided += Die;
+            _cubeHolder.Emptied += Die;
+            _cubeHolder.NewPlayerPosition += _characterJump.RaiseAndJump;
+        }
 
         private void OnDestroy()
         {
-            _cubeHolder.NewPlayerPosition -= OnNewPlayerPosition;
-            _jumpTween?.Kill();
-        }
-
-        private void OnNewPlayerPosition(Vector3 position)
-        {
-            RaiseModel(position);
-            PlayJumpAnimation();
-        }
-
-        private void RaiseModel(Vector3 position)
-        {
-            CompleteJumpAnimation();
+            _dangerousCollisionTrigger.Collided -= Die;
+            _cubeHolder.Emptied -= Die;
+            _cubeHolder.NewPlayerPosition -= _characterJump.RaiseAndJump;
             
-            _stickmanTransform.localPosition = position;
+            _gameControl.GameStarted -= OnGameStarted;
+            _gameControl.GameEnded -= OnGameEnded;
         }
 
-        private void CompleteJumpAnimation() => 
-            _jumpTween.Complete();
-
-        private void PlayJumpAnimation()
+        [Inject]
+        private void Construct(IGameControl gameControl)
         {
-            _animator.SetTrigger(JumpTrigger);
+            _gameControl = gameControl;
+            _gameControl.GameStarted += OnGameStarted;
+        }
 
-            _jumpTween = _stickmanTransform
-                .DOLocalJump(Vector3.zero, _jumpPower, NumJumps, _jumpDuration)
-                .SetRelative();
+        private void Die()
+        {
+            if (_isDead)
+                return;
+            
+            _movement.Disable();
+            _characterRagdollController.EnableRagdoll();
+            _trailEffect.DisableEmitting();
+            
+            _gameControl.EndGame();
+        }
+
+        private void OnGameStarted()
+        {
+            _gameControl.GameStarted -= OnGameStarted;
+            _gameControl.GameEnded += OnGameEnded;
+
+            _movement.Enable();
+            _trailEffect.EnableEmitting();
+        }
+        
+        private void OnGameEnded()
+        {
+            _movement.Disable();
+            _gameControl.GameEnded -= OnGameEnded;
         }
     }
 }

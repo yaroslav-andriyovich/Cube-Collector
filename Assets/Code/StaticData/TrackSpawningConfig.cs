@@ -1,3 +1,4 @@
+using Code.Gameplay.Cubes;
 using Code.Gameplay.Tracks;
 using DG.Tweening;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace Code.StaticData
     public class TrackSpawningConfig : ScriptableObject
     {
         [Header("Initial")]
-        //public GameObject playerTrackInstance;
+        public PickableCube pickableCubePrefab;
         public Track[] trackVariants;
         [Min(0)] public int initialCount;
 

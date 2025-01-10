@@ -1,4 +1,3 @@
-using System;
 using Code.Core.Pools.Poolable;
 using DG.Tweening;
 using UnityEngine;
@@ -22,17 +21,8 @@ namespace Code.VFX
         private void OnEnable()
         {
             ResetCanvasAlpha();
-            OnSpawned();
-        }
-
-        private void OnDisable()
-        {
-            transform.DOKill();
-            _canvasGroup.DOKill();
-        }
-
-        public void OnSpawned() => 
             PlayJump();
+        }
 
         private void ResetCanvasAlpha() => 
             _canvasGroup.alpha = _startTransparencyValue;
@@ -42,12 +32,14 @@ namespace Code.VFX
                 .DOMoveY(_jumpHeight, _jumpDuration)
                 .SetRelative()
                 .SetEase(_jumpEase)
+                .SetLink(gameObject, LinkBehaviour.KillOnDestroy)
                 .OnComplete(PlayInvisible);
 
         private void PlayInvisible() =>
             _canvasGroup
                 .DOFade(_endTransparencyValue, _transparencyDuration)
                 .SetEase(_transparencyEase)
+                .SetLink(gameObject, LinkBehaviour.KillOnDestroy)
                 .OnComplete(Release);
     }
 }

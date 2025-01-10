@@ -13,7 +13,6 @@ namespace Code.Gameplay.Tracks
     public class TrackSpawner : MonoBehaviour, IInitializable
     {
         [SerializeField] private GameObject _playerTrackInstance;
-        [SerializeField] private PickableCube _pickableCubePrefab;
 
         private GameObject FirstSpawned => _spawned[0];
         private GameObject LastSpawned => _spawned[^1];
@@ -24,7 +23,6 @@ namespace Code.Gameplay.Tracks
         
         private PoolService _poolService;
         private MonoPool<PickableCube> _pickablesPool;
-        private List<PickableCube> _spawnedPickables;
         private IObjectResolver _objectResolver;
 
         private void Awake()
@@ -48,11 +46,9 @@ namespace Code.Gameplay.Tracks
                 _playerTrackInstance
             };
 
-            _spawnedPickables = new List<PickableCube>();
-
             _markedToDestroy = new List<PickableCube>();
             
-            _pickablesPool = _poolService.CreatePool(_pickableCubePrefab);
+            _pickablesPool = _poolService.CreatePool(_config.pickableCubePrefab);
             _pickablesPool.Warmup(20);
         }
 

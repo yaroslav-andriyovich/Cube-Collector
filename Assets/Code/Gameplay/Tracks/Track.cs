@@ -21,11 +21,11 @@ namespace Code.Gameplay.Tracks
 
             foreach (CubeSpawnPoint point in GetPickableSpawnPoints())
             {
-                PickableCube pickableCube = pickablesPool.Get(point.transform.position, point.transform.rotation, _pickableParent);
+                PickableCube cube = pickablesPool.Get(point.transform.position, point.transform.rotation, _pickableParent);
                 
-                pickableCube.PickedUp += OnCubePickedUp;
+                cube.PickedUp += OnCubePickedUp;
                 
-                _spawnedPickables.Add(pickableCube);
+                _spawnedPickables.Add(cube);
             }
         }
 

@@ -10,12 +10,12 @@ namespace Code.Gameplay.Cubes
         [SerializeField] private PickableWallTrigger _wallTrigger;
 
         public event Action<PickableCube> WallCollision;
-        public event Action<PickableCollisionData> CollisionWithDropped;
+        public event Action<PickableCube> CollisionWithDropped;
         public event Action<PickableCube> PickedUp;
         public float Height => _boxCollider.size.y;
         public bool IsPickedUp { get; private set; }
 
-        private void Start() => 
+        private void Awake() => 
             _wallTrigger.WallCollision += CheckNearWall;
 
         private void OnEnable() => 
@@ -28,9 +28,9 @@ namespace Code.Gameplay.Cubes
         {
             if (IsPickedUp)
                 return;
-            
-            PickedUp?.Invoke(this);
+
             IsPickedUp = true;
+            PickedUp?.Invoke(this);
         }
 
         private void CheckNearWall(Collider wall)
@@ -65,15 +65,9 @@ namespace Code.Gameplay.Cubes
         private void OnCollisionEnter(Collision collision)
         {
             if (HasPickableComponent(collision, out PickableCube cube) 
-                && IsPickedUp && !cube.IsPickedUp)
+                && IsCollisionWithDroppedCube(cube))
             {
-                PickableCollisionData collisionData = new PickableCollisionData
-                {
-                    owner = this,
-                    other = cube
-                };
-
-                CollisionWithDropped?.Invoke(collisionData);
+                CollisionWithDropped?.Invoke(cube);
             }
         }
 
@@ -86,11 +80,8 @@ namespace Code.Gameplay.Cubes
 
         private bool HasPickableComponent(Collision collision, out PickableCube pickableCube) => 
             collision.transform.TryGetComponent(out pickableCube);
-    }
 
-    public class PickableCollisionData
-    {
-        public PickableCube owner;
-        public PickableCube other;
+        private bool IsCollisionWithDroppedCube(PickableCube cube) => 
+            IsPickedUp && !cube.IsPickedUp;
     }
 }

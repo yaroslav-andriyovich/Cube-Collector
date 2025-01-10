@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 namespace Code.UI
 {
-    public class UIController : MonoBehaviour
+    public class UIView : MonoBehaviour
     {
         [SerializeField] private GameObject _startWindow;
         [SerializeField] private RectTransform _swipeImage;
@@ -16,8 +16,8 @@ namespace Code.UI
         [SerializeField] private CanvasGroup _restartWindowCanvasGroup;
         [SerializeField, Min(0f)] private float _restartWindowAnimationDuration;
         [SerializeField] private Button _restartButton;
-        
-        public event UnityAction RestartButton
+
+        public event UnityAction RestartButtonClick
         {
             add => _restartButton.onClick.AddListener(value);
             remove => _restartButton.onClick.RemoveListener(value);

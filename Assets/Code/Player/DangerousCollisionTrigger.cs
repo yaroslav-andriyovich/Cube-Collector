@@ -8,7 +8,7 @@ namespace Code.Player
     {
         [SerializeField] private List<string> _tags;
         
-        public event Action DangerousCollision;
+        public event Action Collided;
         
         private void OnCollisionEnter(Collision collision) => 
             FindTargetTags(collision);
@@ -19,7 +19,7 @@ namespace Code.Player
             {
                 if (collision.gameObject.CompareTag(targetTag))
                 {
-                    DangerousCollision?.Invoke();
+                    Collided?.Invoke();
                     return;
                 }
             }

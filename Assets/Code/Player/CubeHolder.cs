@@ -18,10 +18,10 @@ namespace Code.Player
         [SerializeField, Min(0)] private int _stackCapacity;
         [SerializeField] private ParticleSystem _stackParticle;
         [SerializeField] private CubeCollectionText _collectTextPrefab;
-        [SerializeField] private DangerousCollisionTrigger _playerCollisionTrigger;
         [SerializeField, Min(0)] private int _vibrationMilliseconds;
 
         public event Action<Vector3> NewPlayerPosition;
+        public event Action Emptied;
 
         private CameraShaker _cameraShaker;
         private TrackSpawner _trackSpawner;
@@ -31,13 +31,11 @@ namespace Code.Player
         private void Start()
         {
             _trackSpawner = FindObjectOfType<TrackSpawner>();
-            _playerCollisionTrigger.DangerousCollision += ReleaseAll;
             SubscribeInitialCubes();
         }
 
         private void OnDestroy()
         {
-            _playerCollisionTrigger.DangerousCollision -= ReleaseAll;
             UnSubscribeAll();
         }
 
@@ -49,14 +47,6 @@ namespace Code.Player
 
             _collectTextPool = poolService.CreatePool(_collectTextPrefab);
             _collectTextPool.Warmup(3);
-        }
-
-        private void ReleaseAll()
-        {
-            for (int i = 0; i < _stack.Count; i++)
-                RemoveCube(_stack[i]);
-            
-            _stack.Clear();
         }
 
         private void SubscribeInitialCubes()
@@ -86,24 +76,24 @@ namespace Code.Player
             cube.WallCollision -= OnWallCollision;
         }
 
-        private void OnCollisionWithDropped(PickableCollisionData collisionData)
+        private void OnCollisionWithDropped(PickableCube other)
         {
-            if (CollisionIsRegistered(collisionData.other))
+            if (CollisionIsRegistered(other))
                 return;
 
             if (IsStackOverflow())
             {
-                DestroyOtherCube(collisionData.other);
+                DestroyDroppedCube(other);
                 return;
             }
 
-            AddCube(collisionData.other);
+            AddCube(other);
         }
 
         private bool IsStackOverflow() => 
             _stack.Count >= _stackCapacity;
 
-        private void DestroyOtherCube(PickableCube cube)
+        private void DestroyDroppedCube(PickableCube cube)
         {
             _stackParticle.Stop();
             _stackParticle.transform.position = cube.transform.position;
@@ -136,7 +126,6 @@ namespace Code.Player
         private void RaiseCube(PickableCube cube, out Vector3 newCubePosition)
         {
             newCubePosition = GetNewCubePosition(cube);
-
             cube.transform.localPosition = newCubePosition;
             
             NewPlayerPosition?.Invoke(newCubePosition + Vector3.up * cube.Height);
@@ -179,12 +168,17 @@ namespace Code.Player
 
             UnSubscribeCube(cube);
             _stack.Remove(cube);
-            RemoveCubeParent(cube);
-            
+            cube.transform.SetParent(null);
             _trackSpawner.MarkUnusedPickable(cube);
+            CheckStackEmptying();
         }
 
-        private void RemoveCubeParent(PickableCube cube) => 
-            cube.transform.SetParent(null);
+        private void CheckStackEmptying()
+        {
+            if (_stack.Count > 0)
+                return;
+            
+            Emptied?.Invoke();
+        }
     }
 }

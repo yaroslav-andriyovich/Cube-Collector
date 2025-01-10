@@ -5,7 +5,7 @@ using VContainer;
 
 namespace Code.Player
 {
-    public class PlayerMovement : MonoBehaviour
+    public class PlayerMovementController : MonoBehaviour
     {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private HorizontalBoundaries _horizontalBoundaries;
@@ -29,6 +29,12 @@ namespace Code.Player
         [Inject]
         private void Construct(IInputService playerInput) => 
             _inputService = playerInput;
+
+        public void Enable() => 
+            enabled = true;
+        
+        public void Disable() => 
+            enabled = false;
 
         private void ChangeVelocity() => 
             _rigidbody.velocity = new Vector3(GetHorizontalVelocity(), 0f, _forwardSpeed);

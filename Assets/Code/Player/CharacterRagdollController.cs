@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Code.Player
 {
-    public class RagdollActivator : MonoBehaviour
+    public class CharacterRagdollController : MonoBehaviour
     {
         [Header("Ragdoll")]
         [SerializeField] private Animator _animator;
@@ -12,11 +12,10 @@ namespace Code.Player
         [SerializeField] private List<Rigidbody> _characterRigidbodyGroup;
 
         [Header("Movement")]
-        [SerializeField] private Rigidbody _rigidbodyForMovement;
         [SerializeField] private BoxCollider _colliderForMovement;
-        [SerializeField] private GravityBooster _attractionForMovement;
+        [SerializeField] private GravityBooster _gravityBooster;
 
-        public void Activate()
+        public void EnableRagdoll()
         {
             DisableComponentsForMovement();
             EnableColliders();
@@ -25,9 +24,8 @@ namespace Code.Player
 
         private void DisableComponentsForMovement()
         {
-            _rigidbodyForMovement.isKinematic = true;
             _colliderForMovement.enabled = false;
-            _attractionForMovement.enabled = false;
+            _gravityBooster.enabled = false;
             _animator.enabled = false;
         }
 

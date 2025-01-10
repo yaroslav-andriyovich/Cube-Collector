@@ -1,4 +1,5 @@
 using Code.Core.Services.Input;
+using Code.Core.Services.Loading;
 using Code.Core.Services.Vibration;
 using DG.Tweening;
 using UnityEngine;
@@ -18,7 +19,7 @@ namespace Code.Core.Scopes
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<SceneLoader>(Lifetime.Singleton);
+            builder.Register<LevelLoader>(Lifetime.Singleton);
             builder.Register<VibrationService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces();
         }
