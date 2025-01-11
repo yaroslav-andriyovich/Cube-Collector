@@ -1,17 +1,22 @@
+using Code.Core.AssetManagement;
 using Code.StaticData;
-using UnityEngine;
 
 namespace Code.Core.Services.StaticData
 {
     public class StaticDataService
     {
+        private readonly IAssetProvider _assetProvider;
+        
         private CameraConfig _cameraConfig;
         private TrackSpawningConfig _trackSpawningConfig;
 
+        public StaticDataService(IAssetProvider assetProvider) => 
+            _assetProvider = assetProvider;
+
         public void LoadAll()
         {
-            _cameraConfig = Resources.Load<CameraConfig>(AssetsPath.StaticData + "/CameraConfig");
-            _trackSpawningConfig = Resources.Load<TrackSpawningConfig>(AssetsPath.StaticData + "/TrackSpawningConfig");
+            _cameraConfig = _assetProvider.Load<CameraConfig>(AssetsPath.StaticData + "/Camera/CameraConfig");
+            _trackSpawningConfig = _assetProvider.Load<TrackSpawningConfig>(AssetsPath.StaticData + "/Tracks/TrackSpawningConfig");
         }
 
         public CameraConfig ForCamera() => 

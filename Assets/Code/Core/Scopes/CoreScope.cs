@@ -1,7 +1,8 @@
+using Code.Core.AssetManagement;
+using Code.Core.SceneManagement;
 using Code.Core.Services.Input;
-using Code.Core.Services.Loading;
+using Code.Core.Services.StaticData;
 using Code.Core.Services.Vibration;
-using DG.Tweening;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -10,18 +11,18 @@ namespace Code.Core.Scopes
 {
     public class CoreScope : LifetimeScope
     {
-        protected override void Awake()
-        {
-            base.Awake();
-            Application.targetFrameRate = 60;
-            DOTween.Init();
-        }
-
+        [SerializeReference] private LoadingScreen _loadingScreenPrefab;
+        
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<LevelLoader>(Lifetime.Singleton);
-            builder.Register<VibrationService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.RegisterEntryPoint<GameBoot>();
+            
+            builder.Register<AssetProvider>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<StaticDataService>(Lifetime.Singleton);
+            builder.RegisterComponentInNewPrefab(_loadingScreenPrefab, Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<SceneLoader>(Lifetime.Singleton);
             builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<VibrationService>(Lifetime.Singleton).AsImplementedInterfaces();
         }
     }
 }

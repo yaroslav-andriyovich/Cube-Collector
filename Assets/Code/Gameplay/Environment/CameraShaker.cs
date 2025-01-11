@@ -1,20 +1,27 @@
 using System;
+using Code.Core.Services.StaticData;
 using Code.StaticData;
 using DG.Tweening;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace Code.Gameplay.Environment
 {
-    public class CameraShaker : IDisposable
+    public class CameraShaker : IInitializable, IDisposable
     {
-        private readonly CameraConfig _config;
+        private readonly StaticDataService _staticDataService;
         private readonly Transform _transform;
 
-        public CameraShaker(CameraConfig cameraConfig)
+        private CameraConfig _config;
+
+        public CameraShaker(StaticDataService staticDataService)
         {
-            _config = cameraConfig;
+            _staticDataService = staticDataService;
             _transform = Camera.main.transform;
         }
+
+        public void Initialize() => 
+            _config = _staticDataService.ForCamera();
 
         public void Dispose() => 
             _transform.DOKill();

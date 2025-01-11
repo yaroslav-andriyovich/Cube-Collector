@@ -1,6 +1,6 @@
 using System;
+using Code.Core.SceneManagement;
 using Code.Core.Services.Input;
-using Code.Core.Services.Loading;
 using VContainer.Unity;
 
 namespace Code.Gameplay.Services.GameControl
@@ -10,16 +10,16 @@ namespace Code.Gameplay.Services.GameControl
         public event Action GameStarted;
         public event Action GameEnded;
         
-        private readonly LevelLoader _levelLoader;
+        private readonly SceneLoader _sceneLoader;
         private readonly IInputService _inputService;
 
         private bool _started;
         private bool _ended;
 
-        public GameController(LevelLoader levelLoader, IInputService inputService)
+        public GameController(SceneLoader sceneLoader, IInputService inputService)
         {
             _inputService = inputService;
-            _levelLoader = levelLoader;
+            _sceneLoader = sceneLoader;
         }
 
         public void Start() => 
@@ -49,7 +49,7 @@ namespace Code.Gameplay.Services.GameControl
         public void RestartGame()
         {
             _inputService.DisableInput();
-            _levelLoader.ReloadCurrent();
+            _sceneLoader.ReloadCurrent();
         }
     }
 }

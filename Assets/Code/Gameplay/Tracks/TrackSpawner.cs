@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Code.Core.Pools;
 using Code.Core.Services.Pools;
+using Code.Core.Services.StaticData;
 using Code.Gameplay.Cubes;
 using Code.StaticData;
 using DG.Tweening;
@@ -17,30 +18,27 @@ namespace Code.Gameplay.Tracks
         private GameObject FirstSpawned => _spawned[0];
         private GameObject LastSpawned => _spawned[^1];
 
+        private StaticDataService _staticDataService;
         private TrackSpawningConfig _config;
         private List<GameObject> _spawned;
         private List<PickableCube> _markedToDestroy;
-        
+
         private PoolService _poolService;
         private MonoPool<PickableCube> _pickablesPool;
         private IObjectResolver _objectResolver;
 
-        private void Awake()
-        {
-            Initialize();
-            InstantiateInitialTracks();
-        }
-
         [Inject]
-        private void Construct(TrackSpawningConfig config, PoolService poolService, IObjectResolver objectResolver)
+        private void Construct(StaticDataService staticDataService, PoolService poolService, IObjectResolver objectResolver)
         {
-            _config = config;
+            _staticDataService = staticDataService;
             _poolService = poolService;
             _objectResolver = objectResolver;
         }
 
         public void Initialize()
         {
+            _config = _staticDataService.ForTrackSpawner();
+            
             _spawned = new List<GameObject>
             {
                 _playerTrackInstance
@@ -50,6 +48,8 @@ namespace Code.Gameplay.Tracks
             
             _pickablesPool = _poolService.CreatePool(_config.pickableCubePrefab);
             _pickablesPool.Warmup(20);
+            
+            InstantiateInitialTracks();
         }
 
         public void GenerateNext()
