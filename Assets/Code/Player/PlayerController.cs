@@ -1,3 +1,5 @@
+using Code.Core.Services.Camera;
+using Code.Core.Services.Vibration;
 using Code.Gameplay.Services.GameControl;
 using Code.VFX;
 using UnityEngine;
@@ -9,6 +11,7 @@ namespace Code.Player
     {
         [SerializeField] private PlayerMovementController _movement;
         [SerializeField] private CubeHolder _cubeHolder;
+        [SerializeField, Min(0)] private int _vibrationMilliseconds;
         [SerializeField] private CharacterJumpController _characterJump;
         [SerializeField] private DangerousCollisionTrigger _dangerousCollisionTrigger;
         [SerializeField] private CharacterRagdollController _characterRagdollController;
@@ -16,12 +19,15 @@ namespace Code.Player
 
         private bool _isDead;
         private IGameControl _gameControl;
+        private IVibrationService _vibrationService;
+        private CameraShakeService _cameraShakeService;
 
         private void Awake()
         {
             _dangerousCollisionTrigger.Collided += Die;
             _cubeHolder.Emptied += Die;
             _cubeHolder.NewPlayerPosition += _characterJump.RaiseAndJump;
+            _cubeHolder.CubeCollidedWithWall += OnCubeCollidedWithWall;
         }
 
         private void OnDestroy()
@@ -29,15 +35,19 @@ namespace Code.Player
             _dangerousCollisionTrigger.Collided -= Die;
             _cubeHolder.Emptied -= Die;
             _cubeHolder.NewPlayerPosition -= _characterJump.RaiseAndJump;
+            _cubeHolder.CubeCollidedWithWall -= OnCubeCollidedWithWall;
             
             _gameControl.GameStarted -= OnGameStarted;
             _gameControl.GameEnded -= OnGameEnded;
         }
 
         [Inject]
-        private void Construct(IGameControl gameControl)
+        private void Construct(IGameControl gameControl, IVibrationService vibrationService, CameraShakeService cameraShakeService)
         {
             _gameControl = gameControl;
+            _vibrationService = vibrationService;
+            _cameraShakeService = cameraShakeService;
+            
             _gameControl.GameStarted += OnGameStarted;
         }
 
@@ -47,7 +57,9 @@ namespace Code.Player
                 return;
             
             _movement.Disable();
+            _cubeHolder.ReleaseAll();
             _characterRagdollController.EnableRagdoll();
+            _cameraShakeService.HardShake();
             _trailEffect.DisableEmitting();
             
             _gameControl.EndGame();
@@ -64,8 +76,15 @@ namespace Code.Player
         
         private void OnGameEnded()
         {
-            _movement.Disable();
             _gameControl.GameEnded -= OnGameEnded;
+            
+            _movement.Disable();
+        }
+
+        private void OnCubeCollidedWithWall()
+        {
+            _cameraShakeService.LightShake();
+            _vibrationService.Vibrate(_vibrationMilliseconds);
         }
     }
 }

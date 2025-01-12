@@ -7,7 +7,13 @@ namespace Code.Core.SceneManagement
 {
     public class SceneLoader
     {
+        private const float PROGRESS_TO_ALLOW_SCENE_ACTIVATION = 0.9f;
+        private const float PROGRESS_FULL = 1f;
+        private const float DELAY_BEFORE_SCENE_ACTIVATION = 1f;
+        
         private readonly ILoadingScreen _loadingScreen;
+
+        private string CurrentScene => SceneManager.GetActiveScene().name;
 
         public SceneLoader(ILoadingScreen loadingScreen) => 
             _loadingScreen = loadingScreen;
@@ -23,18 +29,18 @@ namespace Code.Core.SceneManagement
 
             loadSceneOperation.allowSceneActivation = false;
 
-            while (loadSceneOperation.progress < 0.9f)
+            while (loadSceneOperation.progress < PROGRESS_TO_ALLOW_SCENE_ACTIVATION)
             {
-                float progress = loadSceneOperation.progress / 0.9f;
+                float progress = loadSceneOperation.progress / PROGRESS_TO_ALLOW_SCENE_ACTIVATION;
 
                 _loadingScreen.UpdateProgress(Mathf.Clamp01(progress));
                 
                 await UniTask.Yield();
             }
             
-            _loadingScreen.UpdateProgress(1f);
+            _loadingScreen.UpdateProgress(PROGRESS_FULL);
             
-            await UniTask.Delay(TimeSpan.FromSeconds(1f));
+            await UniTask.Delay(TimeSpan.FromSeconds(DELAY_BEFORE_SCENE_ACTIVATION));
             
             loadSceneOperation.allowSceneActivation = true;
 
@@ -47,5 +53,8 @@ namespace Code.Core.SceneManagement
 
         public void ReloadCurrent() => 
             Load(SceneManager.GetActiveScene().name);
+
+        public bool IsCurrentScene(string sceneName) => 
+            sceneName == CurrentScene;
     }
 }

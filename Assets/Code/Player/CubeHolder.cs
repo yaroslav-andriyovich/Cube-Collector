@@ -2,9 +2,7 @@ using System;
 using System.Collections.Generic;
 using Code.Core.Pools;
 using Code.Core.Services.Pools;
-using Code.Core.Services.Vibration;
 using Code.Gameplay.Cubes;
-using Code.Gameplay.Environment;
 using Code.Gameplay.Tracks;
 using Code.VFX;
 using UnityEngine;
@@ -18,36 +16,31 @@ namespace Code.Player
         [SerializeField, Min(0)] private int _stackCapacity;
         [SerializeField] private ParticleSystem _stackParticle;
         [SerializeField] private CubeCollectionText _collectTextPrefab;
-        [SerializeField, Min(0)] private int _vibrationMilliseconds;
 
         public event Action<Vector3> NewPlayerPosition;
         public event Action Emptied;
+        public event Action CubeCollidedWithWall;
 
-        private CameraShaker _cameraShaker;
         private TrackSpawner _trackSpawner;
-        private IVibrationService _vibrationService;
         private MonoPool<CubeCollectionText> _collectTextPool;
 
-        private void Start()
-        {
-            _trackSpawner = FindObjectOfType<TrackSpawner>();
+        private void Start() => 
             SubscribeInitialCubes();
-        }
 
-        private void OnDestroy()
-        {
+        private void OnDestroy() => 
             UnSubscribeAll();
-        }
 
         [Inject]
-        private void Construct(IVibrationService vibrationService, CameraShaker cameraShaker, PoolService poolService)
+        private void Construct(PoolService poolService, TrackSpawner trackSpawner)
         {
-            _vibrationService = vibrationService;
-            _cameraShaker = cameraShaker;
-
             _collectTextPool = poolService.CreatePool(_collectTextPrefab);
             _collectTextPool.Warmup(3);
+            
+            _trackSpawner = trackSpawner;
         }
+
+        public void ReleaseAll() => 
+            UnSubscribeAll();
 
         private void SubscribeInitialCubes()
         {
@@ -157,8 +150,7 @@ namespace Code.Player
         private void OnWallCollision(PickableCube owner)
         {
             RemoveCube(owner);
-            _cameraShaker.LightShake();
-            _vibrationService.Vibrate(_vibrationMilliseconds);
+            CubeCollidedWithWall?.Invoke();
         }
 
         private void RemoveCube(PickableCube cube)

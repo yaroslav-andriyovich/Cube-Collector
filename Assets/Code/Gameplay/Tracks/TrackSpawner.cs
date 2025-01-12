@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Code.Core.Pools;
 using Code.Core.Services.Pools;
@@ -18,7 +19,7 @@ namespace Code.Gameplay.Tracks
         private GameObject FirstSpawned => _spawned[0];
         private GameObject LastSpawned => _spawned[^1];
 
-        private StaticDataService _staticDataService;
+        private ConfigService _configService;
         private TrackSpawningConfig _config;
         private List<GameObject> _spawned;
         private List<PickableCube> _markedToDestroy;
@@ -28,16 +29,16 @@ namespace Code.Gameplay.Tracks
         private IObjectResolver _objectResolver;
 
         [Inject]
-        private void Construct(StaticDataService staticDataService, PoolService poolService, IObjectResolver objectResolver)
+        private void Construct(ConfigService configService, PoolService poolService, IObjectResolver objectResolver)
         {
-            _staticDataService = staticDataService;
+            _configService = configService;
             _poolService = poolService;
             _objectResolver = objectResolver;
         }
 
         public void Initialize()
         {
-            _config = _staticDataService.ForTrackSpawner();
+            _config = _configService.GetTrackSpawner();
             
             _spawned = new List<GameObject>
             {
@@ -126,8 +127,13 @@ namespace Code.Gameplay.Tracks
                 .OnComplete(CollectGarbage);
         }
 
-        private void CollectGarbage()
+        private void CollectGarbage() => 
+            StartCoroutine(GarbageCollectionRoutine());
+
+        private IEnumerator GarbageCollectionRoutine()
         {
+            yield return new WaitForSeconds(1f);
+            
             DestroyTraveledTrack();
             ReleaseUnusedPickables();
         }

@@ -18,7 +18,7 @@ namespace Code.Core.Scopes
             builder.RegisterEntryPoint<GameBoot>();
             
             builder.Register<AssetProvider>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<StaticDataService>(Lifetime.Singleton);
+            builder.Register<ConfigService>(Lifetime.Singleton);
             builder.RegisterComponentInNewPrefab(_loadingScreenPrefab, Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SceneLoader>(Lifetime.Singleton);
             builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces();

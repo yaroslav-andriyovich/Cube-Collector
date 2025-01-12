@@ -3,26 +3,26 @@ using Code.StaticData;
 
 namespace Code.Core.Services.StaticData
 {
-    public class StaticDataService
+    public class ConfigService
     {
         private readonly IAssetProvider _assetProvider;
         
-        private CameraConfig _cameraConfig;
+        private CameraShakeConfig _cameraShakeShakeConfig;
         private TrackSpawningConfig _trackSpawningConfig;
 
-        public StaticDataService(IAssetProvider assetProvider) => 
+        public ConfigService(IAssetProvider assetProvider) => 
             _assetProvider = assetProvider;
 
         public void LoadAll()
         {
-            _cameraConfig = _assetProvider.Load<CameraConfig>(AssetsPath.StaticData + "/Camera/CameraConfig");
+            _cameraShakeShakeConfig = _assetProvider.Load<CameraShakeConfig>(AssetsPath.StaticData + "/Camera/CameraShakeConfig");
             _trackSpawningConfig = _assetProvider.Load<TrackSpawningConfig>(AssetsPath.StaticData + "/Tracks/TrackSpawningConfig");
         }
 
-        public CameraConfig ForCamera() => 
-            _cameraConfig;
+        public CameraShakeConfig GetCameraShake() => 
+            _cameraShakeShakeConfig;
         
-        public TrackSpawningConfig ForTrackSpawner() => 
+        public TrackSpawningConfig GetTrackSpawner() => 
             _trackSpawningConfig;
     }
 }

@@ -51,7 +51,6 @@ MonoBehaviour:
   _stackParticle: {fileID: 3378104703656810045}
   _collectTextPrefab: {fileID: 6427134697671178581, guid: 52501f8c5c7ad10418be80b76674a60b,
     type: 3}
-  _vibrationMilliseconds: 15
 --- !u!1 &3533781239856290072
 GameObject:
   m_ObjectHideFlags: 0
@@ -104,6 +103,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _movement: {fileID: 7267567736134636847}
   _cubeHolder: {fileID: 1676255251822369048}
+  _vibrationMilliseconds: 15
   _characterJump: {fileID: 4354944230903133034}
   _dangerousCollisionTrigger: {fileID: 9010333263706727566}
   _characterRagdollController: {fileID: 3756647986037277521}
