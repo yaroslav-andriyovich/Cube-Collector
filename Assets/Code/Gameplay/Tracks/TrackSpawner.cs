@@ -124,6 +124,7 @@ namespace Code.Gameplay.Tracks
             track.transform
                 .DOMoveY(targetPosition, _config.animationDuration)
                 .SetEase(_config.animationEase)
+                .SetLink(track.gameObject)
                 .OnComplete(CollectGarbage);
         }
 

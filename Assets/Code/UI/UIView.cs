@@ -23,16 +23,10 @@ namespace Code.UI
             remove => _restartButton.onClick.RemoveListener(value);
         }
         
-        private const float MaxAlpha = 1f;
+        private const float MAX_ALPHA = 1f;
 
         private void OnEnable() => 
             AnimateSwipeImage();
-
-        private void OnDisable() => 
-            _swipeImage.DOKill();
-
-        private void OnDestroy() => 
-            _restartWindowCanvasGroup.DOKill();
 
         public void HideStartWindow() => 
             _startWindow.SetActive(false);
@@ -40,7 +34,8 @@ namespace Code.UI
         public void ShowRestartWindow()
         {
             _restartWindow.SetActive(true);
-            _restartWindowCanvasGroup.DOFade(MaxAlpha, _restartWindowAnimationDuration);
+            
+            _restartWindowCanvasGroup.DOFade(MAX_ALPHA, _restartWindowAnimationDuration);
         }
 
         private void AnimateSwipeImage()
@@ -51,7 +46,8 @@ namespace Code.UI
             _swipeImage
                 .DOAnchorPosX(absoluteDistance, _swipeImageAnimationDuration)
                 .SetLoops(-1, LoopType.Yoyo)
-                .SetEase(Ease.InOutBack);
+                .SetEase(Ease.InOutBack)
+                .SetLink(_startWindow, LinkBehaviour.KillOnDisable);
         }
     }
 }

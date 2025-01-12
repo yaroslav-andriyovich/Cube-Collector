@@ -23,13 +23,15 @@ namespace Code.Core.Pools.Poolable
         }
 
         protected void Release(float delay) => 
-            DOVirtual.DelayedCall(delay, Release, ignoreTimeScale: false);
+            DOVirtual
+                .DelayedCall(delay, Release, ignoreTimeScale: false)
+                .SetLink(gameObject);
         
         protected void Release(float delay, Action delayedAction) => 
             DOVirtual.DelayedCall(delay, () =>
             {
                 delayedAction?.Invoke();
                 Release();
-            }, ignoreTimeScale: false);
+            }, ignoreTimeScale: false).SetLink(gameObject);
     }
 }

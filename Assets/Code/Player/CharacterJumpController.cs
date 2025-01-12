@@ -16,9 +16,6 @@ namespace Code.Player
         
         private Tween _jumpTween;
 
-        private void OnDestroy() => 
-            _jumpTween?.Kill();
-
         public void RaiseAndJump(Vector3 position)
         {
             RaiseCharacter(position);
@@ -41,6 +38,7 @@ namespace Code.Player
 
             _jumpTween = _characterTransform
                 .DOLocalJump(Vector3.zero, _jumpPower, TWEEN_JUMPS_NUM, _jumpDuration)
+                .SetLink(_characterTransform.gameObject)
                 .SetRelative();
         }
     }

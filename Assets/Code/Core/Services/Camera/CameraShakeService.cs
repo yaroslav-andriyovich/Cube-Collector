@@ -17,10 +17,12 @@ namespace Code.Core.Services.Camera
         private CameraShakeConfig _shakeConfig;
 
         private bool _isInitialized;
+        
         private float _shakeTimer;
         private float _shakeTimerTotal;
+        
         private float _startingAmplitude;
-        private float _startingFrequency; // new
+        private float _startingFrequency;
 
         public CameraShakeService(CameraProvider cameraProvider, ConfigService configService)
         {
@@ -42,8 +44,8 @@ namespace Code.Core.Services.Camera
             {
                 _shakeTimer -= Time.deltaTime;
 
-                _cinemachinePerlin.m_AmplitudeGain = Mathf.Lerp(_startingAmplitude, 0f, 1 - (_shakeTimer / _shakeTimerTotal));
-                _cinemachinePerlin.m_FrequencyGain = Mathf.Lerp(_startingFrequency, 0f, 1 - (_shakeTimer / _shakeTimerTotal)); // new
+                _cinemachinePerlin.m_AmplitudeGain = LerpPerlinNoise(_startingAmplitude, 0f);
+                _cinemachinePerlin.m_FrequencyGain = LerpPerlinNoise(_startingFrequency, 0f);
 
                 if (_shakeTimer <= 0)
                     StopShaking();
@@ -69,7 +71,7 @@ namespace Code.Core.Services.Camera
 
             if (frequency >= _cinemachinePerlin.m_FrequencyGain)
             {
-                _startingFrequency = frequency; // new
+                _startingFrequency = frequency;
                 _cinemachinePerlin.m_FrequencyGain = frequency;
             }
 
@@ -85,11 +87,14 @@ namespace Code.Core.Services.Camera
             _startingAmplitude = 0f;
             _cinemachinePerlin.m_AmplitudeGain = 0f;
 
-            _startingFrequency = 0f; // new
+            _startingFrequency = 0f;
             _cinemachinePerlin.m_FrequencyGain = 0f;
 
             _shakeTimer = 0f;
             _shakeTimerTotal = 0f;
         }
+
+        private float LerpPerlinNoise(float current, float target) => 
+            Mathf.Lerp(current, target, 1 - (_shakeTimer / _shakeTimerTotal));
     }
 }

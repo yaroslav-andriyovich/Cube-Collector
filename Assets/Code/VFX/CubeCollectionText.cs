@@ -32,14 +32,14 @@ namespace Code.VFX
                 .DOMoveY(_jumpHeight, _jumpDuration)
                 .SetRelative()
                 .SetEase(_jumpEase)
-                .SetLink(gameObject, LinkBehaviour.KillOnDestroy)
+                .SetLink(gameObject)
                 .OnComplete(PlayInvisible);
 
         private void PlayInvisible() =>
             _canvasGroup
                 .DOFade(_endTransparencyValue, _transparencyDuration)
                 .SetEase(_transparencyEase)
-                .SetLink(gameObject, LinkBehaviour.KillOnDestroy)
+                .SetLink(gameObject)
                 .OnComplete(Release);
     }
 }

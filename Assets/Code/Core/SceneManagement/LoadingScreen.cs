@@ -23,7 +23,6 @@ namespace Code.Core.SceneManagement
         {
             _canvasGroup
                 .DOFade(0, _fadeDuration)
-                .SetLink(gameObject)
                 .OnComplete(() => gameObject.SetActive(false));
         }
 
