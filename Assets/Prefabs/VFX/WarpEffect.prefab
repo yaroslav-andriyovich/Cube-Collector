@@ -4843,4 +4843,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44cd177d69ca41aba383e0b2741e81b2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _playerOffset: {x: 0, y: 0, z: 81}
   _particle: {fileID: 3250288435957382931}

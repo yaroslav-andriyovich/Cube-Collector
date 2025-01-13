@@ -5,7 +5,6 @@ using Code.Gameplay.Services.GameControl;
 using Code.Gameplay.Tracks;
 using Code.Player;
 using Code.UI;
-using Code.VFX;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
@@ -18,7 +17,6 @@ namespace Code.Core.Scopes
         [SerializeField] private UIView _uiView;
         [SerializeField] private PlayerController _playerController;
         [SerializeField] private TrackSpawner _trackSpawner;
-        [SerializeField] private WarpEffect _warpEffectPrefab;
 
         protected override void Configure(IContainerBuilder builder)
         {
@@ -33,8 +31,6 @@ namespace Code.Core.Scopes
             
             builder.Register<PoolService>(Lifetime.Scoped);
             RegisterUI(builder);
-
-            builder.RegisterComponentInNewPrefab(_warpEffectPrefab, Lifetime.Singleton).AsSelf();
         }
         
         private void RegisterUI(IContainerBuilder builder)
