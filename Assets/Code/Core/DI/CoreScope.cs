@@ -1,13 +1,11 @@
-using Code.Core.AssetManagement;
 using Code.Core.SceneManagement;
-using Code.Core.Services.Input;
 using Code.Core.Services.StaticData;
 using Code.Core.Services.Vibration;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
 
-namespace Code.Core.Scopes
+namespace Code.Core.DI
 {
     public class CoreScope : LifetimeScope
     {
@@ -15,13 +13,12 @@ namespace Code.Core.Scopes
         
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.RegisterEntryPoint<GameBoot>();
+            builder.RegisterEntryPoint<Bootstrap>();
             
-            builder.Register<AssetProvider>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<ConfigService>(Lifetime.Singleton);
             builder.RegisterComponentInNewPrefab(_loadingScreenPrefab, Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SceneLoader>(Lifetime.Singleton);
-            builder.Register<InputService>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<GameInputActions>(Lifetime.Singleton);
             builder.Register<VibrationService>(Lifetime.Singleton).AsImplementedInterfaces();
         }
     }

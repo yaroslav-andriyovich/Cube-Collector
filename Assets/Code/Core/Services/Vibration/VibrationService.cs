@@ -3,7 +3,7 @@ using VContainer.Unity;
 
 namespace Code.Core.Services.Vibration
 {
-    public class VibrationService : IVibrationService, IInitializable, IDisposable
+    public class VibrationService : IVibrationService, IDisposable
     {
         private bool _enabled = true;
         private bool _hasVibrator;

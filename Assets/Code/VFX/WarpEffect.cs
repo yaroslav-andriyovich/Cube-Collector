@@ -1,4 +1,4 @@
-using Code.Gameplay.Services.GameControl;
+using Code.Gameplay;
 using Code.Player;
 using UnityEngine;
 using VContainer;

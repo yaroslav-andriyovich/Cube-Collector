@@ -1,4 +1,4 @@
-namespace Code.Gameplay.Services.GameControl
+namespace Code.Gameplay
 {
     public interface IGameControl : IGameEventSender
     {

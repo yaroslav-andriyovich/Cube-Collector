@@ -1,5 +1,4 @@
 using System;
-using Code.Core.Services.Input;
 using UnityEngine;
 using VContainer;
 
@@ -12,7 +11,7 @@ namespace Code.Player
         [SerializeField, Min(0f)] private float _forwardSpeed;
         [SerializeField, Min(0f)] private float _horizontalSpeed;
         
-        private IInputService _inputService;
+        private GameInputActions _inputActions;
 
         private void OnEnable() => 
             _rigidbody.velocity = Vector3.forward * _forwardSpeed;
@@ -27,8 +26,8 @@ namespace Code.Player
         }
 
         [Inject]
-        private void Construct(IInputService playerInput) => 
-            _inputService = playerInput;
+        private void Construct(GameInputActions inputActions) => 
+            _inputActions = inputActions;
 
         public void Enable() => 
             enabled = true;
@@ -49,7 +48,7 @@ namespace Code.Player
         }
 
         private float GetVelocityHorizontalShift() => 
-            _horizontalSpeed * _inputService.MovingDelta.x;
+            _horizontalSpeed * _inputActions.Main.TouchDelta.ReadValue<Vector2>().x;
 
         private float LimitVelocityHorizontalShift(float horizontalShift)
         {
@@ -78,7 +77,7 @@ namespace Code.Player
         }
 
         [Serializable]
-        public struct HorizontalBoundaries
+        private struct HorizontalBoundaries
         {
             public float min;
             public float max;

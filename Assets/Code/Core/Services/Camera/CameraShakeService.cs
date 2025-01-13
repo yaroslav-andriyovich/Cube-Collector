@@ -1,7 +1,7 @@
 using System;
 using Cinemachine;
+using Code.Core.CameraManagement;
 using Code.Core.Services.StaticData;
-using Code.Gameplay.CameraManagement;
 using Code.StaticData;
 using UnityEngine;
 using VContainer.Unity;

@@ -1,6 +1,6 @@
 using System;
 
-namespace Code.Gameplay.Services.GameControl
+namespace Code.Gameplay
 {
     public interface IGameEventSender
     {

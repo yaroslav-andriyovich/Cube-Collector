@@ -1,29 +1,24 @@
 using System;
 using Code.Core.SceneManagement;
-using Code.Core.Services.Input;
-using VContainer.Unity;
 
-namespace Code.Gameplay.Services.GameControl
+namespace Code.Gameplay
 {
-    public class GameController : IGameControl, IStartable
+    public class GameController : IGameControl
     {
         public event Action GameStarted;
         public event Action GameEnded;
         
         private readonly SceneLoader _sceneLoader;
-        private readonly IInputService _inputService;
+        private readonly ILoadingScreen _loadingScreen;
 
         private bool _started;
         private bool _ended;
 
-        public GameController(SceneLoader sceneLoader, IInputService inputService)
+        public GameController(SceneLoader sceneLoader, ILoadingScreen loadingScreen)
         {
-            _inputService = inputService;
             _sceneLoader = sceneLoader;
+            _loadingScreen = loadingScreen;
         }
-
-        public void Start() => 
-            _inputService.EnableInput();
 
         public void StartGame()
         {
@@ -42,13 +37,12 @@ namespace Code.Gameplay.Services.GameControl
 
             _ended = true;
             
-            _inputService.DisableInput();
             GameEnded?.Invoke();
         }
 
         public void RestartGame()
         {
-            _inputService.DisableInput();
+            _loadingScreen.Show();
             _sceneLoader.ReloadCurrent();
         }
     }

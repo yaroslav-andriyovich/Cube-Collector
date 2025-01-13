@@ -1,5 +1,5 @@
 using System;
-using Code.Gameplay.Services.GameControl;
+using Code.Gameplay;
 using VContainer.Unity;
 
 namespace Code.UI

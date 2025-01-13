@@ -9,10 +9,11 @@ using DG.Tweening;
 using UnityEngine;
 using VContainer;
 using VContainer.Unity;
+using Random = UnityEngine.Random;
 
 namespace Code.Gameplay.Tracks
 {
-    public class TrackSpawner : MonoBehaviour, IInitializable
+    public class TrackSpawner : MonoBehaviour
     {
         [SerializeField] private GameObject _playerTrackInstance;
 

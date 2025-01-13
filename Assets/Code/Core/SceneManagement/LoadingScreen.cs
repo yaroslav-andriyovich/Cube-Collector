@@ -8,7 +8,6 @@ namespace Code.Core.SceneManagement
     {
         [SerializeField] private CanvasGroup _canvasGroup;
         [SerializeField, Min(0f)] private float _fadeDuration;
-        [SerializeField] private Image _progressBar;
 
         private void Awake() => 
             DontDestroyOnLoad(this);
@@ -25,8 +24,5 @@ namespace Code.Core.SceneManagement
                 .DOFade(0, _fadeDuration)
                 .OnComplete(() => gameObject.SetActive(false));
         }
-
-        public void UpdateProgress(float progress) => 
-            _progressBar.fillAmount = progress;
     }
 }

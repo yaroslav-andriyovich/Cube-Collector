@@ -1,6 +1,6 @@
 using Code.Core.Services.Camera;
 using Code.Core.Services.Vibration;
-using Code.Gameplay.Services.GameControl;
+using Code.Gameplay;
 using Code.VFX;
 using UnityEngine;
 using VContainer;
