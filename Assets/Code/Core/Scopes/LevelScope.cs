@@ -1,6 +1,5 @@
 using Code.Core.Services.Camera;
 using Code.Core.Services.Pools;
-using Code.Gameplay;
 using Code.Gameplay.CameraManagement;
 using Code.Gameplay.Services.GameControl;
 using Code.Gameplay.Tracks;
@@ -24,7 +23,6 @@ namespace Code.Core.Scopes
         protected override void Configure(IContainerBuilder builder)
         {
             builder.Register<GameController>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<GameLauncher>(Lifetime.Singleton).AsImplementedInterfaces();
             
             builder.RegisterComponent(_cameraProvider);
             builder.Register<CameraShakeService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();

@@ -15,11 +15,20 @@ namespace Code.UI
             _gameControl = gameControl;
         }
 
-        public void Initialize() => 
+        public void Initialize()
+        {
+            _uiView.StartButtonClick += OnStartButton;
             _uiView.RestartButtonClick += OnRestartButton;
+        }
 
-        public void Dispose() => 
+        public void Dispose()
+        {
+            _uiView.StartButtonClick -= OnStartButton;
             _uiView.RestartButtonClick -= OnRestartButton;
+        }
+        
+        private void OnStartButton() => 
+            _gameControl.StartGame();
 
         private void OnRestartButton() => 
             _gameControl.RestartGame();

@@ -1,3 +1,4 @@
+using System;
 using DG.Tweening;
 using UnityEngine;
 using UnityEngine.Events;
@@ -16,6 +17,14 @@ namespace Code.UI
         [SerializeField] private CanvasGroup _restartWindowCanvasGroup;
         [SerializeField, Min(0f)] private float _restartWindowAnimationDuration;
         [SerializeField] private Button _restartButton;
+        [Space]
+        [SerializeField] private TouchZone _touchZone;
+        
+        public event Action StartButtonClick
+        {
+            add => _touchZone.Touch += value;
+            remove => _touchZone.Touch -= value;
+        }
 
         public event UnityAction RestartButtonClick
         {
