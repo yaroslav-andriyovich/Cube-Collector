@@ -66,9 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd37d4fbae504ac38f4d1a9a40de6e13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _wallLayer:
-    serializedVersion: 2
-    m_Bits: 64
+  _wallTag: Wall
 --- !u!1 &6247264816639475759
 GameObject:
   m_ObjectHideFlags: 0
@@ -201,6 +199,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2baa09a255454dbae4e899bfae51d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _newWallCOllision: 0
   _boxCollider: {fileID: 7019147388793402513}
   _wallTrigger: {fileID: 3297633948271027660}
 --- !u!114 &3247662471480115039

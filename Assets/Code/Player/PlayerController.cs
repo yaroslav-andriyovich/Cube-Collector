@@ -60,7 +60,7 @@ namespace Code.Player
             _cubeHolder.ReleaseAll();
             _characterRagdollController.EnableRagdoll();
             _cameraShakeService.HardShake();
-            _trailEffect.DisableEmitting();
+            _trailEffect.Disable();
             
             _gameControl.EndGame();
         }
@@ -71,7 +71,7 @@ namespace Code.Player
             _gameControl.GameEnded += OnGameEnded;
 
             _movement.Enable();
-            _trailEffect.EnableEmitting();
+            _trailEffect.Enable();
         }
         
         private void OnGameEnded()

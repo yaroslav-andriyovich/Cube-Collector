@@ -6,10 +6,10 @@ namespace Code.VFX
     {
         [SerializeField] private TrailRenderer _trail;
 
-        public void EnableEmitting() => 
+        public void Enable() => 
             _trail.emitting = true;
         
-        public void DisableEmitting() => 
+        public void Disable() => 
             _trail.emitting = false;
     }
 }

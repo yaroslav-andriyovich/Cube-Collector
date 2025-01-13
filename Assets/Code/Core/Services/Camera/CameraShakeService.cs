@@ -44,8 +44,8 @@ namespace Code.Core.Services.Camera
             {
                 _shakeTimer -= Time.deltaTime;
 
-                _cinemachinePerlin.m_AmplitudeGain = LerpPerlinNoise(_startingAmplitude, 0f);
-                _cinemachinePerlin.m_FrequencyGain = LerpPerlinNoise(_startingFrequency, 0f);
+                _cinemachinePerlin.m_AmplitudeGain = LerpPerlinNoiseToZero(_startingAmplitude);
+                _cinemachinePerlin.m_FrequencyGain = LerpPerlinNoiseToZero(_startingFrequency);
 
                 if (_shakeTimer <= 0)
                     StopShaking();
@@ -61,7 +61,7 @@ namespace Code.Core.Services.Camera
         public void Shake(float amplitude, float frequency, float duration)
         {
             if (!_isInitialized)
-                throw new NullReferenceException("[Camera Shake Service] Can't shake camera, because service not initialized.");
+                throw new InvalidOperationException("[Camera Shake Service] Can't shake camera, because service not initialized.");
             
             if (amplitude >= _cinemachinePerlin.m_AmplitudeGain)
             {
@@ -94,7 +94,7 @@ namespace Code.Core.Services.Camera
             _shakeTimerTotal = 0f;
         }
 
-        private float LerpPerlinNoise(float current, float target) => 
-            Mathf.Lerp(current, target, 1 - (_shakeTimer / _shakeTimerTotal));
+        private float LerpPerlinNoiseToZero(float current) => 
+            Mathf.Lerp(current, 0f, 1 - (_shakeTimer / _shakeTimerTotal));
     }
 }

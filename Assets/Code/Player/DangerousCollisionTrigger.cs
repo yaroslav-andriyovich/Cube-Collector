@@ -10,19 +10,19 @@ namespace Code.Player
         
         public event Action Collided;
         
-        private void OnCollisionEnter(Collision collision) => 
-            FindTargetTags(collision);
-
-        private void FindTargetTags(Collision collision)
+        private void OnCollisionEnter(Collision collision)
         {
-            foreach (string targetTag in _tags)
+            foreach (string dangerousTag in _tags)
             {
-                if (collision.gameObject.CompareTag(targetTag))
+                if (HasTag(collision, dangerousTag))
                 {
                     Collided?.Invoke();
                     return;
                 }
             }
         }
+
+        private bool HasTag(Collision collision, string tagName) => 
+            collision.gameObject.CompareTag(tagName);
     }
 }
