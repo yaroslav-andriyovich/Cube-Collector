@@ -1,9 +1,9 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Code.Player
+namespace Code.PlayerLogic
 {
-    public class CharacterJumpController : MonoBehaviour
+    public class CharacterJump : MonoBehaviour
     {
         [SerializeField] private Transform _characterTransform;
         [SerializeField] private Animator _animator;
@@ -16,7 +16,7 @@ namespace Code.Player
         
         private Tween _jumpTween;
 
-        public void RaiseAndJump(Vector3 position)
+        public void Jump(Vector3 position)
         {
             RaiseCharacter(position);
             PlayJumpAnimation();

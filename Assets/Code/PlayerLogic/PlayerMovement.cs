@@ -2,9 +2,9 @@ using System;
 using UnityEngine;
 using VContainer;
 
-namespace Code.Player
+namespace Code.PlayerLogic
 {
-    public class PlayerMovementController : MonoBehaviour
+    public class PlayerMovement : MonoBehaviour
     {
         [SerializeField] private Rigidbody _rigidbody;
         [SerializeField] private HorizontalBoundaries _horizontalBoundaries;
@@ -13,11 +13,8 @@ namespace Code.Player
         
         private GameInputActions _inputActions;
 
-        private void OnEnable() => 
-            _rigidbody.velocity = Vector3.forward * _forwardSpeed;
-
-        private void OnDisable() => 
-            _rigidbody.isKinematic = true;
+        private void Awake() => 
+            Disable();
 
         private void FixedUpdate()
         {
@@ -29,11 +26,18 @@ namespace Code.Player
         private void Construct(GameInputActions inputActions) => 
             _inputActions = inputActions;
 
-        public void Enable() => 
+        public void Enable()
+        {
+            _rigidbody.isKinematic = false;
+            _rigidbody.velocity = Vector3.forward * _forwardSpeed;
             enabled = true;
-        
-        public void Disable() => 
+        }
+
+        public void Disable()
+        {
+            _rigidbody.isKinematic = true;
             enabled = false;
+        }
 
         private void ChangeVelocity() => 
             _rigidbody.velocity = new Vector3(GetHorizontalVelocity(), 0f, _forwardSpeed);

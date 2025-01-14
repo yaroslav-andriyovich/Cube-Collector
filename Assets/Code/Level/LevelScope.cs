@@ -3,7 +3,7 @@ using Code.Core.Services.Camera;
 using Code.Core.Services.Pools;
 using Code.Gameplay;
 using Code.Gameplay.Tracks;
-using Code.Player;
+using Code.PlayerLogic;
 using Code.UI;
 using UnityEngine;
 using VContainer;
@@ -14,7 +14,7 @@ namespace Code.Level
     public class LevelScope : LifetimeScope
     {
         [SerializeField] private CameraProvider _cameraProvider;
-        [SerializeField] private PlayerController _playerController;
+        [SerializeField] private Player _player;
         [SerializeField] private TrackSpawner _trackSpawner;
         [SerializeField] private UIInstaller _uiInstaller;
 
@@ -28,7 +28,7 @@ namespace Code.Level
             
             builder.Register<PoolService>(Lifetime.Scoped);
 
-            builder.RegisterComponent(_playerController);
+            builder.RegisterComponent(_player);
             builder.RegisterComponent(_trackSpawner);
 
             _uiInstaller.Install(builder);

@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using Code.Gameplay.Physics;
 using UnityEngine;
 
-namespace Code.Player
+namespace Code.PlayerLogic
 {
-    public class CharacterRagdollController : MonoBehaviour
+    public class CharacterRagdoll : MonoBehaviour
     {
         [Header("Ragdoll")]
         [SerializeField] private Animator _animator;
@@ -15,7 +15,7 @@ namespace Code.Player
         [SerializeField] private BoxCollider _colliderForMovement;
         [SerializeField] private GravityBooster _gravityBooster;
 
-        public void EnableRagdoll()
+        public void Enable()
         {
             DisableComponentsForMovement();
             EnableColliders();

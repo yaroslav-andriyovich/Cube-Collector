@@ -7,7 +7,7 @@ using Code.VFX;
 using UnityEngine;
 using VContainer;
 
-namespace Code.Player
+namespace Code.PlayerLogic
 {
     public class CubeHolder : MonoBehaviour
     {

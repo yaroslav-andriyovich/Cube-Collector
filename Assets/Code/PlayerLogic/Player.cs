@@ -5,16 +5,16 @@ using Code.VFX;
 using UnityEngine;
 using VContainer;
 
-namespace Code.Player
+namespace Code.PlayerLogic
 {
-    public class PlayerController : MonoBehaviour
+    public class Player : MonoBehaviour
     {
-        [SerializeField] private PlayerMovementController _movement;
+        [SerializeField] private PlayerMovement _movement;
         [SerializeField] private CubeHolder _cubeHolder;
         [SerializeField, Min(0)] private int _vibrationMilliseconds;
-        [SerializeField] private CharacterJumpController _characterJump;
+        [SerializeField] private CharacterJump _characterJump;
         [SerializeField] private DangerousCollisionTrigger _dangerousCollisionTrigger;
-        [SerializeField] private CharacterRagdollController _characterRagdollController;
+        [SerializeField] private CharacterRagdoll _characterRagdoll;
         [SerializeField] private TrailEffect _trailEffect;
 
         private bool _isDead;
@@ -26,7 +26,7 @@ namespace Code.Player
         {
             _dangerousCollisionTrigger.Collided += Die;
             _cubeHolder.Emptied += Die;
-            _cubeHolder.NewPlayerPosition += _characterJump.RaiseAndJump;
+            _cubeHolder.NewPlayerPosition += _characterJump.Jump;
             _cubeHolder.CubeCollidedWithWall += OnCubeCollidedWithWall;
         }
 
@@ -34,7 +34,7 @@ namespace Code.Player
         {
             _dangerousCollisionTrigger.Collided -= Die;
             _cubeHolder.Emptied -= Die;
-            _cubeHolder.NewPlayerPosition -= _characterJump.RaiseAndJump;
+            _cubeHolder.NewPlayerPosition -= _characterJump.Jump;
             _cubeHolder.CubeCollidedWithWall -= OnCubeCollidedWithWall;
             
             _gameControl.GameStarted -= OnGameStarted;
@@ -58,7 +58,7 @@ namespace Code.Player
             
             _movement.Disable();
             _cubeHolder.ReleaseAll();
-            _characterRagdollController.EnableRagdoll();
+            _characterRagdoll.Enable();
             _cameraShakeService.HardShake();
             _trailEffect.Disable();
             

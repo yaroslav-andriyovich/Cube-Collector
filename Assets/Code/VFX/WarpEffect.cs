@@ -1,5 +1,5 @@
 using Code.Gameplay;
-using Code.Player;
+using Code.PlayerLogic;
 using UnityEngine;
 using VContainer;
 
@@ -14,10 +14,10 @@ namespace Code.VFX
         private Transform _playerTransform;
 
         [Inject]
-        private void Construct(IGameEventSender gameEventSender, PlayerController playerController)
+        private void Construct(IGameEventSender gameEventSender, Player player)
         {
             _gameEventSender = gameEventSender;
-            _playerTransform = playerController.transform;
+            _playerTransform = player.transform;
 
             _gameEventSender.GameStarted += _particle.Play;
             _gameEventSender.GameEnded += _particle.Stop;

@@ -8,7 +8,7 @@ namespace Code.Core.SceneManagement
     public class SceneLoader
     {
         private const float PROGRESS_TO_ALLOW_SCENE_ACTIVATION = 0.9f;
-        private const float DELAY_BEFORE_SCENE_ACTIVATION = 1f;
+        private const float DELAY_BEFORE_SCENE_ACTIVATION = 0.5f;
 
         public async void Load(string sceneName, Action onLoaded = null) => 
             await LoadAsync(sceneName, onLoaded);

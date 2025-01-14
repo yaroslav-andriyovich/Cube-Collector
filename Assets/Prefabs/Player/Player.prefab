@@ -61,7 +61,7 @@ GameObject:
   m_Component:
   - component: {fileID: 56508689548441954}
   - component: {fileID: 578236568534010453}
-  - component: {fileID: 7267567736134636847}
+  - component: {fileID: 965880800147176196}
   - component: {fileID: 7653018580117857694}
   m_Layer: 0
   m_Name: Player
@@ -101,23 +101,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: be850303fa3144a886d0c7acdcf2d882, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _movement: {fileID: 7267567736134636847}
+  _movement: {fileID: 965880800147176196}
   _cubeHolder: {fileID: 1676255251822369048}
   _vibrationMilliseconds: 15
   _characterJump: {fileID: 4354944230903133034}
   _dangerousCollisionTrigger: {fileID: 9010333263706727566}
-  _characterRagdollController: {fileID: 3756647986037277521}
+  _characterRagdoll: {fileID: 3756647986037277521}
   _trailEffect: {fileID: 568599695645336262}
---- !u!114 &7267567736134636847
+--- !u!114 &965880800147176196
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3533781239856290072}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a9ff60b27dad4e5e8fce8a0aced77111, type: 3}
+  m_Script: {fileID: 11500000, guid: b7ee2b05bf9d8b84f905c619bdc19e54, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   _rigidbody: {fileID: 7653018580117857694}

@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Code.Player
+namespace Code.PlayerLogic
 {
     public class DangerousCollisionTrigger : MonoBehaviour
     {
