@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Code.VFX
 {
-    public class CubeCollectionText : PoolableBase<CubeCollectionText>
+    public class CubeCollectionText : PoolableBase
     {
         [Header("Movement")]
         [SerializeField, Min(0f)] private float _jumpHeight;

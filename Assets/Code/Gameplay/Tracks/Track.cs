@@ -17,7 +17,7 @@ namespace Code.Gameplay.Tracks
         [Inject]
         private void Construct(PoolService poolService)
         {
-            MonoPool<PickableCube> pickablesPool = poolService.GetPool<PickableCube>();
+            MonoPool<PickableCube> pickablesPool = poolService.GetRandomPool<PickableCube>();
 
             foreach (CubeSpawnPoint point in GetPickableSpawnPoints())
             {

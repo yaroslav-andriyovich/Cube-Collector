@@ -143,8 +143,10 @@ namespace Code.Player
         private void SpawnCollectText(Vector3 at)
         {
             Vector3 worldPosition = transform.TransformPoint(at);
-
-            _collectTextPool.Get(worldPosition, Quaternion.identity);
+            CubeCollectionText cubeCollectionText = _collectTextPool.Get();
+            
+            cubeCollectionText.transform.position = worldPosition;
+            cubeCollectionText.transform.rotation = Quaternion.identity;
         }
 
         private void OnWallCollision(PickableCube owner)

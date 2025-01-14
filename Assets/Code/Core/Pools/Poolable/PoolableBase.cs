@@ -4,18 +4,18 @@ using UnityEngine;
 
 namespace Code.Core.Pools.Poolable
 {
-    public abstract class PoolableBase<T> : MonoBehaviour, IPoolable<T> where T : PoolableBase<T>
+    public abstract class PoolableBase : MonoBehaviour, IPoolable
     {
-        private Action<T> _returnToPool;
+        private Action<IPoolable> _returnToPool;
 
-        void IPoolable<T>.Initialize(Action<T> returnAction) => 
+        void IPoolable.Initialize(Action<IPoolable> returnAction) => 
             _returnToPool = returnAction;
 
         public void Release()
         {
             if (_returnToPool != null)
             {
-                _returnToPool((T)this);
+                _returnToPool(this);
                 return;
             }
             

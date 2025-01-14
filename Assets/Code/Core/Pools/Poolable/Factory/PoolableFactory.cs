@@ -4,7 +4,7 @@ using VContainer.Unity;
 
 namespace Code.Core.Pools.Poolable.Factory
 {
-    public class PoolableFactory<T> : IPoolableFactory<T> where T : MonoBehaviour, IPoolable<T>
+    public class PoolableFactory<T> : IPoolableFactory<T> where T : Component, IPoolable
     {
         public T Prefab { get; }
 

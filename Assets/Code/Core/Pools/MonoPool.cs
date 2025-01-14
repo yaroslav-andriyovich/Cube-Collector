@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace Code.Core.Pools
 {
-    public class MonoPool<T> where T : MonoBehaviour, IPoolable<T>
+    public class MonoPool<T> where T : Component, IPoolable
     {
         public Transform ObjectsParent { get; private set; }
         
@@ -43,16 +43,6 @@ namespace Code.Core.Pools
             throw new Exception("Pool limit reached and autoExpand is disabled.");
         }
 
-        public T Get(Vector3 at, Quaternion rotation)
-        {
-            T element = Get();
-
-            element.transform.position = at;
-            element.transform.rotation = rotation;
-
-            return element;
-        }
-
         public T Get(Vector3 at, Quaternion rotation, Transform parent)
         {
             T element = Get();
@@ -66,21 +56,26 @@ namespace Code.Core.Pools
             return element;
         }
 
-        public void ReturnToPool(T element)
+        public void ReturnToPool(IPoolable poolable)
         {
-            if (_availableObjects.Contains(element))
+            T type = poolable as T;
+            
+            if (poolable is null)
+                return;
+
+            if (_availableObjects.Contains(type))
                 return;
 
             if (CanReturnObjectToPool())
             {
-                element.gameObject.SetActive(false);
-                element.transform.SetParent(ObjectsParent);
+                type.gameObject.SetActive(false);
+                type.transform.SetParent(ObjectsParent);
             
-                _availableObjects.Push(element);
+                _availableObjects.Push(type);
                 return;
             }
             
-            Object.Destroy(element.gameObject);
+            Object.Destroy(type.gameObject);
             --_currentSize;
         }
 

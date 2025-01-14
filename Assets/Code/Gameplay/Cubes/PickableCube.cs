@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Code.Gameplay.Cubes
 {
-    public class PickableCube : PoolableBase<PickableCube>
+    public class PickableCube : PoolableBase
     {
         [SerializeField] private BoxCollider _boxCollider;
         [SerializeField] private PickableWallTrigger _wallTrigger;

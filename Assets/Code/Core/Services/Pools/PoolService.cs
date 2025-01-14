@@ -6,101 +6,134 @@ using Code.Core.Pools.Poolable;
 using Code.Core.Pools.Poolable.Factory;
 using UnityEngine;
 using VContainer;
+using Random = UnityEngine.Random;
 
 namespace Code.Core.Services.Pools
 {
     public class PoolService
     {
-        private readonly Dictionary<Type, Dictionary<int, object>> _pools;
+        private readonly Dictionary<Type, Dictionary<GameObject, object>> _pools;
         private readonly IObjectResolver _objectResolver;
 
-        private Transform _poolsParent;
+        private Transform _monoContainer;
 
         public PoolService(IObjectResolver objectResolver)
         {
-            _pools = new Dictionary<Type, Dictionary<int, object>>();
+            _pools = new Dictionary<Type, Dictionary<GameObject, object>>();
             _objectResolver = objectResolver;
-
-            CreatePoolsParent();
+            
+            CreateMonoContainer();
         }
 
-        public MonoPool<T> CreatePool<T>(T prefab, int maxSize = 0, bool autoExpand = true) where T : MonoBehaviour, IPoolable<T>
+        public T Spawn<T>() where T : Component, IPoolable
+        {
+            MonoPool<T> pool = GetRandomPool<T>();
+
+            return pool.Get();
+        }
+
+        public T Spawn<T>(T prefab) where T : Component, IPoolable
+        {
+            MonoPool<T> pool = GetOrCreatePool(prefab);
+
+            return pool.Get();
+        }
+        
+        public T Spawn<T>(T prefab, Vector3 at, Quaternion rotation) where T : Component, IPoolable
+        {
+            T element = Spawn(prefab);
+            Transform transform = element.transform;
+
+            transform.position = at;
+            transform.rotation = rotation;
+
+            return element;
+        }
+
+        public void Warmup<T>(T prefab, int count) where T : Component, IPoolable
+        {
+            MonoPool<T> pool = GetOrCreatePool(prefab);
+
+            pool.Warmup(count);
+        }
+
+        public MonoPool<T> CreatePool<T>(T prefab, int maxSize = 0, bool autoExpand = true) where T : Component, IPoolable
         {
             IPoolableFactory<T> poolableFactory = new PoolableFactory<T>(_objectResolver, prefab);
 
             return CreatePool(poolableFactory, maxSize, autoExpand);
         }
 
-        public MonoPool<T> CreatePool<T>(GameObject prefab, int maxSize = 0, bool autoExpand = true) where T : MonoBehaviour, IPoolable<T>
-        {
-            IPoolableFactory<T> poolableFactory = new PoolableFactory<T>(_objectResolver, prefab.GetComponent<T>());
-
-            return CreatePool(poolableFactory, maxSize, autoExpand);
-        }
-
-        public MonoPool<T> CreatePool<T>(IPoolableFactory<T> poolableFactory, int maxSize = 0, bool autoExpand = true) where T : MonoBehaviour, IPoolable<T>
+        public MonoPool<T> CreatePool<T>(IPoolableFactory<T> poolableFactory, int maxSize = 0, bool autoExpand = true) where T : Component, IPoolable
         {
             Type type = typeof(T);
-            int prefabId = poolableFactory.Prefab.GetInstanceID();
-            
-            if (!_pools.ContainsKey(type))
+            GameObject gameObject = poolableFactory.Prefab.gameObject;
+
+            if (!IsTypeRegistered(type))
             {
-                _pools[type] = new Dictionary<int, object>();
+                _pools[type] = new Dictionary<GameObject, object>();
             }
-            
-            if (_pools[type].ContainsKey(prefabId))
-                throw new Exception($"Pool of type {type} with prefab ID {prefabId} already created");
+
+            if (IsObjectRegisteredByType(gameObject, type))
+                throw new Exception($"Pool of type {type} with prefab {gameObject.name} already created");
 
             MonoPool<T> pool = new MonoPool<T>(poolableFactory, maxSize, autoExpand);
 
-            pool.ObjectsParent.SetParent(_poolsParent);
-            _pools[type][prefabId] = pool;
+            pool.ObjectsParent.SetParent(_monoContainer);
+            _pools[type][gameObject] = pool;
 
             return pool;
         }
 
-        public MonoPool<T> GetPool<T>() where T : MonoBehaviour, IPoolable<T>
-        {
-            if (_pools.TryGetValue(typeof(T), out Dictionary<int, object> prefabs))
-            {
-                return (MonoPool<T>)prefabs.Values.First();
-            }
-
-            throw new Exception($"No pool found for type {typeof(T)}");
-        }
-
-        public MonoPool<T> GetPool<T>(T prefab) where T : MonoBehaviour, IPoolable<T>
+        public MonoPool<T> GetPool<T>(T prefab) where T : Component, IPoolable
         {
             Type type = typeof(T);
-            int prefabId = prefab.GetInstanceID();
+            GameObject gameObject = prefab.gameObject;
 
-            if (_pools.ContainsKey(type) && _pools[type].ContainsKey(prefabId))
+            if (IsTypeRegistered(type) && IsObjectRegisteredByType(gameObject, type))
             {
-                return (MonoPool<T>)_pools[type][prefabId];
+                return (MonoPool<T>)_pools[type][gameObject];
             }
 
-            throw new KeyNotFoundException($"No pool found for type {type} with prefab {prefab.name}({prefabId})");
+            throw new KeyNotFoundException($"No pool found for type {type} with prefab {prefab.name}");
         }
 
-        public MonoPool<T> GetPool<T>(GameObject prefab) where T : MonoBehaviour, IPoolable<T>
+        public MonoPool<T> GetRandomPool<T>() where T : Component, IPoolable
         {
             Type type = typeof(T);
-            T component = prefab.GetComponent<T>();
-            int prefabId = component.GetInstanceID();
 
-            if (_pools.ContainsKey(type) && _pools[type].ContainsKey(prefabId))
+            if (_pools.TryGetValue(type, out Dictionary<GameObject, object> pools))
             {
-                return (MonoPool<T>)_pools[type][prefabId];
+                return (MonoPool<T>)pools.Values.ElementAt(Random.Range(0, pools.Count));
             }
-
-            throw new KeyNotFoundException($"No pool found for type {type} with prefab {prefab.name}({prefabId})");
+            
+            throw new KeyNotFoundException($"No pool found for type {type}");
         }
 
-        private void CreatePoolsParent()
+        private void CreateMonoContainer()
         {
             GameObject gameObject = new GameObject("[Pool Service]");
 
-            _poolsParent = gameObject.transform;
+            _monoContainer = gameObject.transform;
+        }
+
+        private bool IsTypeRegistered(Type type) => 
+            _pools.ContainsKey(type);
+
+        private bool IsObjectRegisteredByType(GameObject gameObject, Type type) => 
+            _pools[type].ContainsKey(gameObject);
+
+        private MonoPool<T> GetOrCreatePool<T>(T prefab) where T : Component, IPoolable
+        {
+            Type type = typeof(T);
+            MonoPool<T> pool;
+
+            if (!IsTypeRegistered(type))
+                pool = CreatePool(prefab);
+            else
+                pool = GetPool(prefab);
+            
+            return pool;
         }
     }
 }
