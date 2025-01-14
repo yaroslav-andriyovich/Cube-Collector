@@ -57,7 +57,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3004939040762984103}
   m_Layer: 0
-  m_Name: PickableGroup
+  m_Name: CubeGroup
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -216,7 +216,7 @@ PrefabInstance:
     - target: {fileID: 4383135956606238134, guid: a7292aaaba8f2c94a8e14bc3ab5c7ae1,
         type: 3}
       propertyPath: m_Name
-      value: PickableSpawnPoint
+      value: CubeSpawnPoint
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -750,9 +750,34 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
         type: 3}
+      propertyPath: _cubesParent
+      value: 
+      objectReference: {fileID: 3004939040762984103}
+    - target: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
+        type: 3}
       propertyPath: _pickableParent
       value: 
       objectReference: {fileID: 3004939040762984103}
+    - target: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
+        type: 3}
+      propertyPath: _cubeSpawnPoints.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
+        type: 3}
+      propertyPath: _cubeSpawnPoints.Array.data[0]
+      value: 
+      objectReference: {fileID: 2660612515021301493}
+    - target: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
+        type: 3}
+      propertyPath: _cubeSpawnPoints.Array.data[1]
+      value: 
+      objectReference: {fileID: 5544895962482588374}
+    - target: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
+        type: 3}
+      propertyPath: _cubeSpawnPoints.Array.data[2]
+      value: 
+      objectReference: {fileID: 4748932914873686904}
     - target: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
         type: 3}
       propertyPath: _pickableSpawnPoints.Array.size
@@ -1371,7 +1396,7 @@ PrefabInstance:
     - target: {fileID: 4383135956606238134, guid: a7292aaaba8f2c94a8e14bc3ab5c7ae1,
         type: 3}
       propertyPath: m_Name
-      value: PickableSpawnPoint (2)
+      value: CubeSpawnPoint (2)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1531,7 +1556,7 @@ PrefabInstance:
     - target: {fileID: 4383135956606238134, guid: a7292aaaba8f2c94a8e14bc3ab5c7ae1,
         type: 3}
       propertyPath: m_Name
-      value: PickableSpawnPoint (1)
+      value: CubeSpawnPoint (1)
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

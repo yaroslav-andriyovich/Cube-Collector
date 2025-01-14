@@ -94,7 +94,7 @@ GameObject:
   - component: {fileID: 2590569617558832784}
   - component: {fileID: 7019147388793402513}
   m_Layer: 6
-  m_Name: WallCube
+  m_Name: Wall
   m_TagString: Wall
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

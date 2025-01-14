@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2490159149143218187}
   - component: {fileID: 2528780967029115660}
   m_Layer: 0
-  m_Name: PickableSpawnPoint
+  m_Name: CubeSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

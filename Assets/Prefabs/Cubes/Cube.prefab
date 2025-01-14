@@ -160,11 +160,13 @@ GameObject:
   m_Component:
   - component: {fileID: 2590569617558832784}
   - component: {fileID: 1260764138389141569}
+  - component: {fileID: 1725878351531005894}
+  - component: {fileID: 5877011829116854000}
   - component: {fileID: 3247662471480115039}
   - component: {fileID: -2105967441346805290}
   - component: {fileID: 7019147388793402513}
   m_Layer: 0
-  m_Name: PickableCube
+  m_Name: Cube
   m_TagString: Pickable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -199,9 +201,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e2baa09a255454dbae4e899bfae51d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _newWallCOllision: 0
   _boxCollider: {fileID: 7019147388793402513}
+  _droppedCubeTrigger: {fileID: 1725878351531005894}
   _wallTrigger: {fileID: 3297633948271027660}
+  _wallAlignmentAssistant: {fileID: 5877011829116854000}
+--- !u!114 &1725878351531005894
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7527850806464432811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fb8b170db388459a95627b5f6821caa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5877011829116854000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7527850806464432811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb73ed4b355141e5990af3388c8beaaf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &3247662471480115039
 MonoBehaviour:
   m_ObjectHideFlags: 0

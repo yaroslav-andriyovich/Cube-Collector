@@ -9,48 +9,52 @@ namespace Code.Gameplay.Tracks
 {
     public class Track : MonoBehaviour
     {
-        [SerializeField] private CubeSpawnPoint[] _pickableSpawnPoints;
-        [SerializeField] private Transform _pickableParent;
+        [SerializeField] private CubeSpawnPoint[] _cubeSpawnPoints;
 
-        private List<PickableCube> _spawnedPickables = new List<PickableCube>();
+        private List<Cube> _spawnedCubes = new List<Cube>();
 
         private void OnDestroy()
         {
-            foreach (PickableCube cube in _spawnedPickables)
+            foreach (Cube cube in _spawnedCubes)
             {
                 cube.PickedUp -= OnCubePickedUp;
                 cube.Release();
             }
             
-            _spawnedPickables.Clear();
+            _spawnedCubes.Clear();
         }
 
         [Inject]
         private void Construct(PoolService poolService)
         {
-            MonoPool<PickableCube> pickablesPool = poolService.GetRandomPool<PickableCube>();
+            MonoPool<Cube> cubesPool = poolService.GetRandomPool<Cube>();
 
-            foreach (CubeSpawnPoint point in GetPickableSpawnPoints())
+            foreach (CubeSpawnPoint point in GetCubeSpawnPoints())
             {
-                PickableCube cube = pickablesPool.Get();
+                Cube cube = cubesPool.Get();
 
                 cube.transform.position = point.transform.position;
                 cube.transform.rotation = point.transform.rotation;
-                cube.transform.SetParent(_pickableParent);
+                cube.transform.SetParent(transform);
                 cube.PickedUp += OnCubePickedUp;
                 
-                _spawnedPickables.Add(cube);
+                _spawnedCubes.Add(cube);
             }
         }
 
-        private void OnCubePickedUp(PickableCube cube)
+        #if UNITY_EDITOR
+        public void SetCubeSpawnPoints(CubeSpawnPoint[] spawnPoints) => 
+            _cubeSpawnPoints = spawnPoints;
+        #endif
+
+        public CubeSpawnPoint[] GetCubeSpawnPoints() => 
+            _cubeSpawnPoints;
+
+        private void OnCubePickedUp(Cube cube)
         {
             cube.PickedUp -= OnCubePickedUp;
             
-            _spawnedPickables.Remove(cube);
+            _spawnedCubes.Remove(cube);
         }
-
-        public CubeSpawnPoint[] GetPickableSpawnPoints() => 
-            _pickableSpawnPoints;
     }
 }

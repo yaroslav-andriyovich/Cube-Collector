@@ -11,7 +11,7 @@ namespace Code.PlayerLogic
 {
     public class CubeHolder : MonoBehaviour
     {
-        [SerializeField] private List<PickableCube> _stack;
+        [SerializeField] private List<Cube> _stack;
         [SerializeField, Min(0)] private int _stackCapacity;
         [SerializeField] private ParticleSystem _stackParticle;
         [SerializeField] private CubeCollectionText _collectTextPrefab;
@@ -43,7 +43,7 @@ namespace Code.PlayerLogic
 
         private void SubscribeInitialCubes()
         {
-            foreach (PickableCube cube in _stack)
+            foreach (Cube cube in _stack)
             {
                 SubscribeCube(cube);
                 cube.PickUp();
@@ -52,23 +52,23 @@ namespace Code.PlayerLogic
 
         private void UnSubscribeAll()
         {
-            foreach (PickableCube cube in _stack)
+            foreach (Cube cube in _stack)
                 UnSubscribeCube(cube);
         }
 
-        private void SubscribeCube(PickableCube cube)
+        private void SubscribeCube(Cube cube)
         {
             cube.CollisionWithDropped += OnCollisionWithDropped;
             cube.WallCollision += OnWallCollision;
         }
         
-        private void UnSubscribeCube(PickableCube cube)
+        private void UnSubscribeCube(Cube cube)
         {
             cube.CollisionWithDropped -= OnCollisionWithDropped;
             cube.WallCollision -= OnWallCollision;
         }
 
-        private void OnCollisionWithDropped(PickableCube other)
+        private void OnCollisionWithDropped(Cube other)
         {
             if (CollisionIsRegistered(other))
                 return;
@@ -85,7 +85,7 @@ namespace Code.PlayerLogic
         private bool IsStackOverflow() => 
             _stack.Count >= _stackCapacity;
 
-        private void DestroyDroppedCube(PickableCube cube)
+        private void DestroyDroppedCube(Cube cube)
         {
             _stackParticle.Stop();
             _stackParticle.transform.position = cube.transform.position;
@@ -95,7 +95,7 @@ namespace Code.PlayerLogic
             cube.Release();
         }
 
-        private void AddCube(PickableCube cube)
+        private void AddCube(Cube cube)
         {
             if (CollisionIsRegistered(cube))
                 return;
@@ -109,13 +109,13 @@ namespace Code.PlayerLogic
             SpawnCollectText(cubePosition);
         }
 
-        private bool CollisionIsRegistered(PickableCube cube) => 
+        private bool CollisionIsRegistered(Cube cube) => 
             _stack.Contains(cube);
 
-        private void MakeCubeAsChildren(PickableCube cube) => 
+        private void MakeCubeAsChildren(Cube cube) => 
             cube.transform.SetParent(transform);
 
-        private void RaiseCube(PickableCube cube, out Vector3 newCubePosition)
+        private void RaiseCube(Cube cube, out Vector3 newCubePosition)
         {
             newCubePosition = GetNewCubePosition(cube);
             cube.transform.localPosition = newCubePosition;
@@ -123,9 +123,9 @@ namespace Code.PlayerLogic
             NewPlayerPosition?.Invoke(newCubePosition + Vector3.up * cube.Height);
         }
 
-        private Vector3 GetNewCubePosition(PickableCube cube)
+        private Vector3 GetNewCubePosition(Cube cube)
         {
-            PickableCube preLastCubeInStack = _stack[^2];
+            Cube preLastCubeInStack = _stack[^2];
             Vector3 prevCubePosition = preLastCubeInStack.transform.localPosition;
             Vector3 newCubePosition = prevCubePosition + Vector3.up * cube.Height;
             
@@ -142,19 +142,17 @@ namespace Code.PlayerLogic
         private void SpawnCollectText(Vector3 at)
         {
             Vector3 worldPosition = transform.TransformPoint(at);
-            CubeCollectionText cubeCollectionText = _poolService.Spawn(_collectTextPrefab);
             
-            cubeCollectionText.transform.position = worldPosition;
-            cubeCollectionText.transform.rotation = Quaternion.identity;
+            _poolService.Spawn(_collectTextPrefab, worldPosition, Quaternion.identity);
         }
 
-        private void OnWallCollision(PickableCube owner)
+        private void OnWallCollision(Cube owner)
         {
             RemoveCube(owner);
             CubeCollidedWithWall?.Invoke();
         }
 
-        private void RemoveCube(PickableCube cube)
+        private void RemoveCube(Cube cube)
         {
             if (cube == null || !CollisionIsRegistered(cube))
                 return;
@@ -162,7 +160,7 @@ namespace Code.PlayerLogic
             UnSubscribeCube(cube);
             _stack.Remove(cube);
             cube.transform.SetParent(null);
-            _trackSpawner.MarkUnusedPickable(cube);
+            _trackSpawner.MarkUnusedCube(cube);
             CheckStackEmptying();
         }
 

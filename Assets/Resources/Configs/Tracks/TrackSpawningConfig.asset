@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7aa5cae0884139a21e533c844deada, type: 3}
   m_Name: TrackSpawningConfig
   m_EditorClassIdentifier: 
-  pickableCubePrefab: {fileID: 1260764138389141569, guid: 301b9405d8c909a428728d02529b4021,
+  _cubePrefab: {fileID: 1260764138389141569, guid: 301b9405d8c909a428728d02529b4021,
     type: 3}
   trackVariants:
   - {fileID: 8549249554582737912, guid: 58441342f95812d438f6d086517d5e93, type: 3}

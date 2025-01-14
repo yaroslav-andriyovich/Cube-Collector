@@ -22,7 +22,7 @@ namespace Code.Gameplay.Tracks
         private ConfigService _configService;
         private TrackSpawningConfig _config;
         private List<GameObject> _spawned;
-        private List<PickableCube> _markedToDestroy;
+        private List<Cube> _markedToDestroy;
 
         private PoolService _poolService;
         private IObjectResolver _objectResolver;
@@ -44,9 +44,9 @@ namespace Code.Gameplay.Tracks
                 _playerTrackInstance
             };
 
-            _markedToDestroy = new List<PickableCube>();
+            _markedToDestroy = new List<Cube>();
             
-            _poolService.Warmup(_config.pickableCubePrefab, 20);
+            _poolService.Warmup(_config._cubePrefab, 20);
             
             InstantiateInitialTracks();
         }
@@ -59,7 +59,7 @@ namespace Code.Gameplay.Tracks
             AnimateLift(spawnedTrack);
         }
 
-        public void MarkUnusedPickable(PickableCube cube) =>
+        public void MarkUnusedCube(Cube cube) =>
             _markedToDestroy.Add(cube);
 
         private void InstantiateInitialTracks()
@@ -134,7 +134,7 @@ namespace Code.Gameplay.Tracks
             yield return new WaitForSeconds(1f);
             
             DestroyTraveledTrack();
-            ReleaseUnusedPickables();
+            ReleaseUnusedCubes();
         }
 
         private void DestroyTraveledTrack()
@@ -145,9 +145,9 @@ namespace Code.Gameplay.Tracks
             Destroy(traveledTrack);
         }
 
-        private void ReleaseUnusedPickables()
+        private void ReleaseUnusedCubes()
         {
-            foreach (PickableCube cube in _markedToDestroy)
+            foreach (Cube cube in _markedToDestroy)
                 cube.Release();
 
             _markedToDestroy.Clear();

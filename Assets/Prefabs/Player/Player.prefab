@@ -300,7 +300,7 @@ PrefabInstance:
     - target: {fileID: 7527850806464432811, guid: 301b9405d8c909a428728d02529b4021,
         type: 3}
       propertyPath: m_Name
-      value: PickableCube
+      value: Cube
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

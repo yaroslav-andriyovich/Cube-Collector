@@ -3,16 +3,16 @@ using UnityEngine;
 
 namespace Code.Gameplay.Cubes
 {
-    public class PickableWallTrigger : MonoBehaviour
+    public class WallTrigger : MonoBehaviour
     {
         [SerializeField] private string _wallTag;
         
-        public event Action<Collider> WallCollision;
+        public event Action<Collider> Collision;
         
         private void OnTriggerEnter(Collider target)
         {
             if (HasWallTag(target))
-                WallCollision?.Invoke(target);
+                Collision?.Invoke(target);
         }
         
         private bool HasWallTag(Collider target) => 

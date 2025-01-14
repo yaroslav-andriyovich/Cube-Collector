@@ -9,7 +9,7 @@ namespace Code.StaticData
     public class TrackSpawningConfig : ScriptableObject
     {
         [Header("Initial")]
-        public PickableCube pickableCubePrefab;
+        public Cube _cubePrefab;
         public Track[] trackVariants;
         [Min(0)] public int initialCount;
 
