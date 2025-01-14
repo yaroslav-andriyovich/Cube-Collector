@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Code.Core.Pools;
 using Code.Core.Services.Pools;
 using Code.Gameplay.Cubes;
 using Code.Gameplay.Tracks;
@@ -22,7 +21,7 @@ namespace Code.Player
         public event Action CubeCollidedWithWall;
 
         private TrackSpawner _trackSpawner;
-        private MonoPool<CubeCollectionText> _collectTextPool;
+        private PoolService _poolService;
 
         private void Start() => 
             SubscribeInitialCubes();
@@ -33,8 +32,8 @@ namespace Code.Player
         [Inject]
         private void Construct(PoolService poolService, TrackSpawner trackSpawner)
         {
-            _collectTextPool = poolService.CreatePool(_collectTextPrefab);
-            _collectTextPool.Warmup(3);
+            _poolService = poolService;
+            _poolService.Warmup(_collectTextPrefab, 3);
             
             _trackSpawner = trackSpawner;
         }
@@ -143,7 +142,7 @@ namespace Code.Player
         private void SpawnCollectText(Vector3 at)
         {
             Vector3 worldPosition = transform.TransformPoint(at);
-            CubeCollectionText cubeCollectionText = _collectTextPool.Get();
+            CubeCollectionText cubeCollectionText = _poolService.Spawn(_collectTextPrefab);
             
             cubeCollectionText.transform.position = worldPosition;
             cubeCollectionText.transform.rotation = Quaternion.identity;

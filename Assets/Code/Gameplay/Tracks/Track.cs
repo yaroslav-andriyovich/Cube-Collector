@@ -14,21 +14,6 @@ namespace Code.Gameplay.Tracks
 
         private List<PickableCube> _spawnedPickables = new List<PickableCube>();
 
-        [Inject]
-        private void Construct(PoolService poolService)
-        {
-            MonoPool<PickableCube> pickablesPool = poolService.GetRandomPool<PickableCube>();
-
-            foreach (CubeSpawnPoint point in GetPickableSpawnPoints())
-            {
-                PickableCube cube = pickablesPool.Get(point.transform.position, point.transform.rotation, _pickableParent);
-                
-                cube.PickedUp += OnCubePickedUp;
-                
-                _spawnedPickables.Add(cube);
-            }
-        }
-
         private void OnDestroy()
         {
             foreach (PickableCube cube in _spawnedPickables)
@@ -38,6 +23,24 @@ namespace Code.Gameplay.Tracks
             }
             
             _spawnedPickables.Clear();
+        }
+
+        [Inject]
+        private void Construct(PoolService poolService)
+        {
+            MonoPool<PickableCube> pickablesPool = poolService.GetRandomPool<PickableCube>();
+
+            foreach (CubeSpawnPoint point in GetPickableSpawnPoints())
+            {
+                PickableCube cube = pickablesPool.Get();
+
+                cube.transform.position = point.transform.position;
+                cube.transform.rotation = point.transform.rotation;
+                cube.transform.SetParent(_pickableParent);
+                cube.PickedUp += OnCubePickedUp;
+                
+                _spawnedPickables.Add(cube);
+            }
         }
 
         private void OnCubePickedUp(PickableCube cube)

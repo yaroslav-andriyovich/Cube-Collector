@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Code.Core.Pools;
 using Code.Core.Services.Pools;
 using Code.Core.Services.StaticData;
 using Code.Gameplay.Cubes;
@@ -26,7 +25,6 @@ namespace Code.Gameplay.Tracks
         private List<PickableCube> _markedToDestroy;
 
         private PoolService _poolService;
-        private MonoPool<PickableCube> _pickablesPool;
         private IObjectResolver _objectResolver;
 
         [Inject]
@@ -48,8 +46,7 @@ namespace Code.Gameplay.Tracks
 
             _markedToDestroy = new List<PickableCube>();
             
-            _pickablesPool = _poolService.CreatePool(_config.pickableCubePrefab);
-            _pickablesPool.Warmup(20);
+            _poolService.Warmup(_config.pickableCubePrefab, 20);
             
             InstantiateInitialTracks();
         }

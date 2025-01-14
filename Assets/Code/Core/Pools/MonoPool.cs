@@ -43,19 +43,6 @@ namespace Code.Core.Pools
             throw new Exception("Pool limit reached and autoExpand is disabled.");
         }
 
-        public T Get(Vector3 at, Quaternion rotation, Transform parent)
-        {
-            T element = Get();
-
-            element.transform.position = at;
-            element.transform.rotation = rotation;
-            
-            if (parent != null)
-                element.transform.SetParent(parent);
-
-            return element;
-        }
-
         public void ReturnToPool(IPoolable poolable)
         {
             T type = poolable as T;
