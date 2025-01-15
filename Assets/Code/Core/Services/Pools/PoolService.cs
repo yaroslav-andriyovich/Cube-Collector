@@ -49,6 +49,18 @@ namespace Code.Core.Services.Pools
 
             return element;
         }
+        
+        public T Spawn<T>(T prefab, Vector3 at, Quaternion rotation, Transform parent) where T : Component, IPoolable
+        {
+            T element = Spawn(prefab);
+            Transform transform = element.transform;
+
+            transform.position = at;
+            transform.rotation = rotation;
+            transform.SetParent(parent);
+
+            return element;
+        }
 
         public void Warmup<T>(T prefab, int count) where T : Component, IPoolable
         {

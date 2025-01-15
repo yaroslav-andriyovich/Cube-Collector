@@ -2,7 +2,7 @@ using Code.Core.CameraManagement;
 using Code.Core.Services.Camera;
 using Code.Core.Services.Pools;
 using Code.Gameplay;
-using Code.Gameplay.Tracks;
+using Code.Gameplay.Systems;
 using Code.PlayerLogic;
 using Code.UI;
 using UnityEngine;
@@ -29,7 +29,10 @@ namespace Code.Level
             builder.Register<PoolService>(Lifetime.Scoped);
 
             builder.RegisterComponent(_player);
+
             builder.RegisterComponent(_trackSpawner);
+            builder.Register<TrackCubesSpawner>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<LostCubeHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             _uiInstaller.Install(builder);
         }

@@ -46,7 +46,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4a5cf316c343429ea3912fae5b33a472, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _pickableSpawnPoints: []
+  <CubePrefab>k__BackingField: {fileID: 1260764138389141569, guid: 301b9405d8c909a428728d02529b4021,
+    type: 3}
+  _cubeSpawnPoints: []
+  _trackSpawnTrigger: {fileID: 6981066168131913371}
 --- !u!1001 &2682416865150409641
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -189,6 +192,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e67e76ad172bdaa43a299a11f6c209ea, type: 3}
+--- !u!114 &6981066168131913371 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 720516806661299024, guid: e67e76ad172bdaa43a299a11f6c209ea,
+    type: 3}
+  m_PrefabInstance: {fileID: 7574615346439445963}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0d1a51ce16c4455a43da43d6f7d9690, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &8087407089011628418 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1811095077221385289, guid: e67e76ad172bdaa43a299a11f6c209ea,

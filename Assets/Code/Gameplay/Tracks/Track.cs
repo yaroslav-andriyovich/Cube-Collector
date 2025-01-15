@@ -1,46 +1,24 @@
+using System;
 using System.Collections.Generic;
-using Code.Core.Pools;
-using Code.Core.Services.Pools;
+using System.Linq;
 using Code.Gameplay.Cubes;
 using UnityEngine;
-using VContainer;
 
 namespace Code.Gameplay.Tracks
 {
     public class Track : MonoBehaviour
     {
+        [field: SerializeField] public Cube CubePrefab { get; private set; }
         [SerializeField] private CubeSpawnPoint[] _cubeSpawnPoints;
+        [SerializeField] private TrackSpawnTrigger _trackSpawnTrigger;
 
-        private List<Cube> _spawnedCubes = new List<Cube>();
-
-        private void OnDestroy()
+        public event Action NextTrackTrigger
         {
-            foreach (Cube cube in _spawnedCubes)
-            {
-                cube.PickedUp -= OnCubePickedUp;
-                cube.Release();
-            }
-            
-            _spawnedCubes.Clear();
+            add => _trackSpawnTrigger.Triggered += value;
+            remove => _trackSpawnTrigger.Triggered -= value;
         }
 
-        [Inject]
-        private void Construct(PoolService poolService)
-        {
-            MonoPool<Cube> cubesPool = poolService.GetRandomPool<Cube>();
-
-            foreach (CubeSpawnPoint point in GetCubeSpawnPoints())
-            {
-                Cube cube = cubesPool.Get();
-
-                cube.transform.position = point.transform.position;
-                cube.transform.rotation = point.transform.rotation;
-                cube.transform.SetParent(transform);
-                cube.PickedUp += OnCubePickedUp;
-                
-                _spawnedCubes.Add(cube);
-            }
-        }
+        private readonly List<Cube> _attachedCubes = new List<Cube>();
 
         #if UNITY_EDITOR
         public void SetCubeSpawnPoints(CubeSpawnPoint[] spawnPoints) => 
@@ -50,11 +28,38 @@ namespace Code.Gameplay.Tracks
         public CubeSpawnPoint[] GetCubeSpawnPoints() => 
             _cubeSpawnPoints;
 
-        private void OnCubePickedUp(Cube cube)
+        public void AttachCube(Cube cube)
         {
-            cube.PickedUp -= OnCubePickedUp;
+            if (_attachedCubes.Contains(cube))
+                return;
             
-            _spawnedCubes.Remove(cube);
+            if (cube.transform.parent != transform)
+                cube.transform.SetParent(transform);
+
+            _attachedCubes.Add(cube);
+        }
+        
+        public void AttachCubes(List<Cube> cubes)
+        {
+            foreach (Cube cube in cubes)
+                AttachCube(cube);
+        }
+        
+        public void DetachCube(Cube cube)
+        {
+            if (!_attachedCubes.Contains(cube))
+                return;
+
+            _attachedCubes.Remove(cube);
+        }
+
+        public IReadOnlyCollection<Cube> DetachAllCubes()
+        {
+            IReadOnlyList<Cube> cubes = _attachedCubes.ToList();
+            
+            _attachedCubes.Clear();
+
+            return cubes;
         }
     }
 }

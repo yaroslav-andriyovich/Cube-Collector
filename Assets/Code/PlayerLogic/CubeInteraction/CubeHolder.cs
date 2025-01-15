@@ -1,42 +1,25 @@
 using System;
 using System.Collections.Generic;
-using Code.Core.Services.Pools;
 using Code.Gameplay.Cubes;
-using Code.Gameplay.Tracks;
-using Code.VFX;
 using UnityEngine;
-using VContainer;
 
-namespace Code.PlayerLogic
+namespace Code.PlayerLogic.CubeInteraction
 {
     public class CubeHolder : MonoBehaviour
     {
         [SerializeField] private List<Cube> _stack;
         [SerializeField, Min(0)] private int _stackCapacity;
-        [SerializeField] private ParticleSystem _stackParticle;
-        [SerializeField] private CubeCollectionText _collectTextPrefab;
 
         public event Action<Vector3> NewPlayerPosition;
         public event Action Emptied;
-        public event Action CubeCollidedWithWall;
-
-        private TrackSpawner _trackSpawner;
-        private PoolService _poolService;
+        public event Action<Cube> CubeCollidedWithWall;
+        public event Action<Cube> StackOverflow;
 
         private void Start() => 
             SubscribeInitialCubes();
 
         private void OnDestroy() => 
             UnSubscribeAll();
-
-        [Inject]
-        private void Construct(PoolService poolService, TrackSpawner trackSpawner)
-        {
-            _poolService = poolService;
-            _poolService.Warmup(_collectTextPrefab, 3);
-            
-            _trackSpawner = trackSpawner;
-        }
 
         public void ReleaseAll() => 
             UnSubscribeAll();
@@ -87,12 +70,10 @@ namespace Code.PlayerLogic
 
         private void DestroyDroppedCube(Cube cube)
         {
-            _stackParticle.Stop();
-            _stackParticle.transform.position = cube.transform.position;
-            _stackParticle.Play();
-
             cube.PickUp();
             cube.Release();
+            
+            StackOverflow?.Invoke(cube);
         }
 
         private void AddCube(Cube cube)
@@ -104,9 +85,7 @@ namespace Code.PlayerLogic
             _stack.Add(cube);
             SubscribeCube(cube);
             MakeCubeAsChildren(cube);
-            RaiseCube(cube, out Vector3 cubePosition);
-            PlayStackEffect(cubePosition);
-            SpawnCollectText(cubePosition);
+            RaiseCube(cube);
         }
 
         private bool CollisionIsRegistered(Cube cube) => 
@@ -115,9 +94,10 @@ namespace Code.PlayerLogic
         private void MakeCubeAsChildren(Cube cube) => 
             cube.transform.SetParent(transform);
 
-        private void RaiseCube(Cube cube, out Vector3 newCubePosition)
+        private void RaiseCube(Cube cube)
         {
-            newCubePosition = GetNewCubePosition(cube);
+            Vector3 newCubePosition = GetNewCubePosition(cube);
+            
             cube.transform.localPosition = newCubePosition;
             
             NewPlayerPosition?.Invoke(newCubePosition + Vector3.up * cube.Height);
@@ -132,24 +112,10 @@ namespace Code.PlayerLogic
             return newCubePosition;
         }
 
-        private void PlayStackEffect(Vector3 at)
-        {
-            _stackParticle.Stop();
-            _stackParticle.transform.localPosition = at;
-            _stackParticle.Play();
-        }
-
-        private void SpawnCollectText(Vector3 at)
-        {
-            Vector3 worldPosition = transform.TransformPoint(at);
-            
-            _poolService.Spawn(_collectTextPrefab, worldPosition, Quaternion.identity);
-        }
-
         private void OnWallCollision(Cube owner)
         {
             RemoveCube(owner);
-            CubeCollidedWithWall?.Invoke();
+            CubeCollidedWithWall?.Invoke(owner);
         }
 
         private void RemoveCube(Cube cube)
@@ -160,7 +126,6 @@ namespace Code.PlayerLogic
             UnSubscribeCube(cube);
             _stack.Remove(cube);
             cube.transform.SetParent(null);
-            _trackSpawner.MarkUnusedCube(cube);
             CheckStackEmptying();
         }
 

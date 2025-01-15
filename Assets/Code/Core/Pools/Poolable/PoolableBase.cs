@@ -22,12 +22,12 @@ namespace Code.Core.Pools.Poolable
             Destroy(gameObject);
         }
 
-        protected void Release(float delay) => 
+        public void Release(float delay) => 
             DOVirtual
                 .DelayedCall(delay, Release, ignoreTimeScale: false)
                 .SetLink(gameObject);
-        
-        protected void Release(float delay, Action delayedAction) => 
+
+        public void Release(float delay, Action delayedAction) => 
             DOVirtual.DelayedCall(delay, () =>
             {
                 delayedAction?.Invoke();

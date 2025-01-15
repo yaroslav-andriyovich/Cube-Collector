@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Code.Gameplay.Physics;
 using UnityEngine;
 
-namespace Code.PlayerLogic
+namespace Code.PlayerLogic.Character
 {
     public class CharacterRagdoll : MonoBehaviour
     {

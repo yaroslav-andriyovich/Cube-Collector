@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1251405539903050611}
   - component: {fileID: 1676255251822369048}
+  - component: {fileID: 8400712574206260596}
+  - component: {fileID: 6698562284184054751}
   m_Layer: 0
   m_Name: CubeHolder
   m_TagString: Untagged
@@ -49,8 +51,36 @@ MonoBehaviour:
   - {fileID: 4100903095440650044}
   _stackCapacity: 8
   _stackParticle: {fileID: 3378104703656810045}
-  _collectTextPrefab: {fileID: 6427134697671178581, guid: 52501f8c5c7ad10418be80b76674a60b,
+--- !u!114 &8400712574206260596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2373379922446933920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 94a1f5f5ce33461080797955824f2282, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cubeHolder: {fileID: 1676255251822369048}
+  _effectPrefab: {fileID: 6427134697671178581, guid: 52501f8c5c7ad10418be80b76674a60b,
     type: 3}
+  _countToWarmUp: 3
+--- !u!114 &6698562284184054751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2373379922446933920}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 83bcc8a03b77473b8e98adb3f32172f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _cubeHolder: {fileID: 1676255251822369048}
+  _particle: {fileID: 3378104703656810045}
 --- !u!1 &3533781239856290072
 GameObject:
   m_ObjectHideFlags: 0

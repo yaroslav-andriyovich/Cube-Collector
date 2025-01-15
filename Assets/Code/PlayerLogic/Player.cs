@@ -1,6 +1,10 @@
+using System;
 using Code.Core.Services.Camera;
 using Code.Core.Services.Vibration;
 using Code.Gameplay;
+using Code.Gameplay.Cubes;
+using Code.PlayerLogic.Character;
+using Code.PlayerLogic.CubeInteraction;
 using Code.VFX;
 using UnityEngine;
 using VContainer;
@@ -16,6 +20,8 @@ namespace Code.PlayerLogic
         [SerializeField] private DangerousCollisionTrigger _dangerousCollisionTrigger;
         [SerializeField] private CharacterRagdoll _characterRagdoll;
         [SerializeField] private TrailEffect _trailEffect;
+
+        public event Action<Cube> CubeLost;
 
         private bool _isDead;
         private IGameControl _gameControl;
@@ -81,10 +87,12 @@ namespace Code.PlayerLogic
             _movement.Disable();
         }
 
-        private void OnCubeCollidedWithWall()
+        private void OnCubeCollidedWithWall(Cube cube)
         {
             _cameraShakeService.LightShake();
             _vibrationService.Vibrate(_vibrationMilliseconds);
+            
+            CubeLost?.Invoke(cube);
         }
     }
 }

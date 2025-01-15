@@ -1,7 +1,7 @@
 using DG.Tweening;
 using UnityEngine;
 
-namespace Code.PlayerLogic
+namespace Code.PlayerLogic.Character
 {
     public class CharacterJump : MonoBehaviour
     {

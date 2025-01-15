@@ -1,9 +1,13 @@
+using System;
+using Code.Gameplay.Systems;
 using UnityEngine;
 
 namespace Code.Gameplay.Tracks
 {
     public class TrackSpawnTrigger : MonoBehaviour
     {
+        public event Action Triggered;
+        
         private const string PlayerTag = "Player";
         
         private bool _isTriggered;
@@ -12,8 +16,9 @@ namespace Code.Gameplay.Tracks
         {
             if (!_isTriggered && IsPlayer(other))
             {
-                InvokeTrackGenerator();
+                //InvokeTrackGenerator();
                 _isTriggered = true;
+                Triggered?.Invoke();
             }
         }
 

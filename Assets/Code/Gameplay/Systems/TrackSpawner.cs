@@ -1,8 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Code.Core.Services.Pools;
 using Code.Core.Services.StaticData;
-using Code.Gameplay.Cubes;
+using Code.Gameplay.Tracks;
 using Code.StaticData;
 using DG.Tweening;
 using UnityEngine;
@@ -10,19 +11,21 @@ using VContainer;
 using VContainer.Unity;
 using Random = UnityEngine.Random;
 
-namespace Code.Gameplay.Tracks
+namespace Code.Gameplay.Systems
 {
     public class TrackSpawner : MonoBehaviour
     {
-        [SerializeField] private GameObject _playerTrackInstance;
+        [SerializeField] private Track _playerTrackInstance;
 
-        private GameObject FirstSpawned => _spawned[0];
-        private GameObject LastSpawned => _spawned[^1];
+        public event Action<Track> Spawned;
+        public event Action<Track> DeSpawned;
+
+        private Track FirstSpawned => _spawned[0];
+        private Track LastSpawned => _spawned[^1];
 
         private ConfigService _configService;
         private TrackSpawningConfig _config;
-        private List<GameObject> _spawned;
-        private List<Cube> _markedToDestroy;
+        private List<Track> _spawned;
 
         private PoolService _poolService;
         private IObjectResolver _objectResolver;
@@ -39,28 +42,31 @@ namespace Code.Gameplay.Tracks
         {
             _config = _configService.GetTrackSpawner();
             
-            _spawned = new List<GameObject>
+            _spawned = new List<Track>
             {
                 _playerTrackInstance
             };
 
-            _markedToDestroy = new List<Cube>();
-            
-            _poolService.Warmup(_config._cubePrefab, 20);
-            
+            SubscribeInitialTracks();
             InstantiateInitialTracks();
         }
 
         public void GenerateNext()
         {
             Vector3 position = GetNextPosition();
-            GameObject spawnedTrack = InstantiateRandomPrefab(position);
+            Track spawnedTrack = InstantiateRandomPrefab(position);
 
             AnimateLift(spawnedTrack);
         }
 
-        public void MarkUnusedCube(Cube cube) =>
-            _markedToDestroy.Add(cube);
+        private void SubscribeInitialTracks()
+        {
+            foreach (Track track in _spawned)
+                track.NextTrackTrigger += GenerateNext;
+        }
+        
+        private void UnSubscribeTrack(Track track) => 
+            track.NextTrackTrigger -= GenerateNext;
 
         private void InstantiateInitialTracks()
         {
@@ -80,21 +86,23 @@ namespace Code.Gameplay.Tracks
             return position;
         }
 
-        private GameObject InstantiateRandomPrefab(Vector3 at)
+        private Track InstantiateRandomPrefab(Vector3 at)
         {
-            GameObject prefab = GetRandomPrefab();
-            GameObject track = _objectResolver.Instantiate(prefab, at, Quaternion.identity);
+            Track prefab = GetRandomPrefab();
+            Track track = _objectResolver.Instantiate(prefab, at, Quaternion.identity);
 
             _spawned.Add(track);
+            track.NextTrackTrigger += GenerateNext;
+            Spawned?.Invoke(track);
             return track;
         }
 
-        private GameObject GetRandomPrefab()
+        private Track GetRandomPrefab()
         {
             int startIndex = 0;
             int endIndex = _config.trackVariants.Length;
             int randomIndex = Random.Range(startIndex, endIndex);
-            GameObject randomTrack = _config.trackVariants[randomIndex].gameObject;
+            Track randomTrack = _config.trackVariants[randomIndex];
 
             return randomTrack;
         }
@@ -115,7 +123,7 @@ namespace Code.Gameplay.Tracks
             return position;
         }
 
-        private void AnimateLift(GameObject track)
+        private void AnimateLift(Track track)
         {
             float targetPosition = FirstSpawned.transform.position.y;
 
@@ -134,23 +142,17 @@ namespace Code.Gameplay.Tracks
             yield return new WaitForSeconds(1f);
             
             DestroyTraveledTrack();
-            ReleaseUnusedCubes();
         }
 
         private void DestroyTraveledTrack()
         {
-            GameObject traveledTrack = FirstSpawned;
+            Track traveledTrack = FirstSpawned;
+
+            UnSubscribeTrack(traveledTrack);
 
             _spawned.Remove(traveledTrack);
-            Destroy(traveledTrack);
-        }
-
-        private void ReleaseUnusedCubes()
-        {
-            foreach (Cube cube in _markedToDestroy)
-                cube.Release();
-
-            _markedToDestroy.Clear();
+            DeSpawned?.Invoke(traveledTrack);
+            Destroy(traveledTrack.gameObject);
         }
     }
 }
