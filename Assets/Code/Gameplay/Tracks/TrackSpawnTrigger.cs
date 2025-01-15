@@ -1,5 +1,4 @@
 using System;
-using Code.Gameplay.Systems;
 using UnityEngine;
 
 namespace Code.Gameplay.Tracks
@@ -12,11 +11,13 @@ namespace Code.Gameplay.Tracks
         
         private bool _isTriggered;
 
+        private void OnEnable() => 
+            _isTriggered = false;
+
         private void OnTriggerEnter(Collider other)
         {
             if (!_isTriggered && IsPlayer(other))
             {
-                //InvokeTrackGenerator();
                 _isTriggered = true;
                 Triggered?.Invoke();
             }
@@ -24,12 +25,5 @@ namespace Code.Gameplay.Tracks
 
         private bool IsPlayer(Collider targetCollider) => 
             targetCollider.CompareTag(PlayerTag);
-
-        private void InvokeTrackGenerator()
-        {
-            TrackSpawner trackSpawner = FindObjectOfType<TrackSpawner>();
-
-            trackSpawner.GenerateNext();
-        }
     }
 }
