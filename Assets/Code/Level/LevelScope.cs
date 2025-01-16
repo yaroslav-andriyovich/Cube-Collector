@@ -19,21 +19,26 @@ namespace Code.Level
 
         protected override void Configure(IContainerBuilder builder)
         {
-            builder.Register<LevelBoot>(Lifetime.Singleton).AsImplementedInterfaces();
-            builder.Register<GameController>(Lifetime.Singleton).AsImplementedInterfaces();
-            
-            builder.RegisterComponent(_cameraProvider);
-            builder.Register<CameraShakeService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
-            
+            RegisterCore(builder);
+            RegisterCamera(builder);
             builder.Register<PoolService>(Lifetime.Scoped);
-
             builder.RegisterComponent(_player);
-
-            builder.Register<TrackSpawner>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
-            builder.Register<TrackCubesSpawner>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
+            builder.Register<TrackFlow>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<LostCubeHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 
             _uiInstaller.Install(builder);
+        }
+
+        private void RegisterCore(IContainerBuilder builder)
+        {
+            builder.Register<LevelBoot>(Lifetime.Singleton).AsImplementedInterfaces();
+            builder.Register<GameController>(Lifetime.Singleton).AsImplementedInterfaces();
+        }
+
+        private void RegisterCamera(IContainerBuilder builder)
+        {
+            builder.RegisterComponent(_cameraProvider);
+            builder.Register<CameraShakeService>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
         }
     }
 }

@@ -1,25 +1,23 @@
-using System;
 using System.Collections.Generic;
 using Code.Core.Services.Pools;
 using Code.Core.Services.StaticData;
 using Code.Gameplay.Cubes;
 using Code.Gameplay.Tracks;
+using Code.StaticData;
 using UnityEngine;
 using VContainer.Unity;
 
 namespace Code.Gameplay.Systems
 {
-    public class TrackCubesSpawner : IInitializable, IDisposable
+    public class TrackCubesSpawner : IInitializable
     {
-        private readonly TrackSpawner _trackSpawner;
         private readonly PoolService _poolService;
         private readonly ConfigService _configService;
 
         private readonly Dictionary<Cube, Track> _cubesAndTracks;
 
-        public TrackCubesSpawner(TrackSpawner trackSpawner, PoolService poolService, ConfigService configService)
+        public TrackCubesSpawner(PoolService poolService, ConfigService configService)
         {
-            _trackSpawner = trackSpawner;
             _poolService = poolService;
             _configService = configService;
             _cubesAndTracks = new Dictionary<Cube, Track>();
@@ -27,21 +25,12 @@ namespace Code.Gameplay.Systems
 
         public void Initialize()
         {
-            _trackSpawner.Spawned += OnTrackSpawned;
-            _trackSpawner.DeSpawned += OnTrackDeSpawned;
+            TrackSpawningConfig config = _configService.GetForTracks();
             
-            _poolService.Warmup(_configService.GetForTracks().cubePrefab, 20);
+            _poolService.Warmup(config.cubePrefab, config.preparedCubesNumber);
         }
 
-        public void Dispose()
-        {
-            _trackSpawner.Spawned -= OnTrackSpawned;
-            _trackSpawner.DeSpawned -= OnTrackDeSpawned;
-            
-            _cubesAndTracks.Clear();
-        }
-
-        private void OnTrackSpawned(Track track)
+        public void OnTrackSpawned(Track track)
         {
             CubeSpawnPoint[] cubeSpawnPoints = track.GetCubeSpawnPoints();
             List<Cube> trackCubes = new List<Cube>(cubeSpawnPoints.Length);
@@ -55,6 +44,22 @@ namespace Code.Gameplay.Systems
             }
             
             track.AttachCubes(trackCubes);
+        }
+
+        public void OnTrackDeSpawned(Track track)
+        {
+            IReadOnlyCollection<Cube> detachedCubes = track.DetachAllCubes();
+
+            foreach (Cube cube in detachedCubes)
+            {
+                if (_cubesAndTracks.ContainsKey(cube))
+                {
+                    cube.PickedUp -= OnCubePickedUp;
+                    _cubesAndTracks.Remove(cube);
+                }
+                
+                cube.Release();
+            }
         }
 
         private Cube SpawnCube(Cube prefab, Vector3 position, Quaternion rotation, Transform parent)
@@ -73,22 +78,6 @@ namespace Code.Gameplay.Systems
             {
                 track.DetachCube(cube);
                 _cubesAndTracks.Remove(cube);
-            }
-        }
-
-        private void OnTrackDeSpawned(Track track)
-        {
-            IReadOnlyCollection<Cube> detachedCubes = track.DetachAllCubes();
-
-            foreach (Cube cube in detachedCubes)
-            {
-                if (_cubesAndTracks.ContainsKey(cube))
-                {
-                    cube.PickedUp -= OnCubePickedUp;
-                    _cubesAndTracks.Remove(cube);
-                }
-                
-                cube.Release();
             }
         }
     }

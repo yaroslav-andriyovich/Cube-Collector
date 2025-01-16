@@ -8,23 +8,23 @@ namespace Code.Level
     public class LevelBoot : IPostInitializable, IDisposable
     {
         private readonly ILoadingScreen _loadingScreen;
-        private readonly TrackSpawner _trackSpawner;
+        private readonly TrackFlow _trackFlow;
         private readonly GameInputActions _inputActions;
 
         public LevelBoot(
             ILoadingScreen loadingScreen, 
-            TrackSpawner trackSpawner, 
+            TrackFlow trackFlow, 
             GameInputActions inputActions
             )
         {
             _loadingScreen = loadingScreen;
-            _trackSpawner = trackSpawner;
+            _trackFlow = trackFlow;
             _inputActions = inputActions;
         }
 
         public void PostInitialize()
         {
-            _trackSpawner.SpawnInitialTracks();
+            _trackFlow.Initialize();
             _loadingScreen.Hide();
             _inputActions.Enable();
         }

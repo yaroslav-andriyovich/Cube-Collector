@@ -17,8 +17,12 @@ namespace Code.StaticData
         public Cube cubePrefab;
         public Track[] trackVariants;
         [Min(0)] public int initialCount;
+        
+        [Header("Spawn/DeSpawn")]
+        [Min(0)] public int preparedCubesNumber;
+        [Min(0f)] public float deSpawnDelay;
 
-        [Header("Spawning")]
+        [Header("Spawn Animation")]
         [Min(0f)] public float downwardPositionShift;
         [Min(0f)] public float forwardPositionShift;
         [Min(0f)] public float animationDuration;

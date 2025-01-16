@@ -30,6 +30,8 @@ MonoBehaviour:
   - {fileID: 8549249554582737912, guid: c213da57bff1e3442a40aa8dbbebbe02, type: 3}
   - {fileID: 8549249554582737912, guid: 153ed94e42a94e841a3b5612100efb7c, type: 3}
   initialCount: 3
+  preparedCubesNumber: 0
+  deSpawnDelay: 1
   downwardPositionShift: 150
   forwardPositionShift: 30
   animationDuration: 0.6
