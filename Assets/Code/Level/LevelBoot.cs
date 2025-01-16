@@ -5,30 +5,26 @@ using VContainer.Unity;
 
 namespace Code.Level
 {
-    public class LevelBoot : IInitializable, IDisposable
+    public class LevelBoot : IPostInitializable, IDisposable
     {
         private readonly ILoadingScreen _loadingScreen;
-        private readonly TrackCubesSpawner _trackCubesSpawner;
         private readonly TrackSpawner _trackSpawner;
         private readonly GameInputActions _inputActions;
 
         public LevelBoot(
             ILoadingScreen loadingScreen, 
-            TrackCubesSpawner trackCubesSpawner, 
             TrackSpawner trackSpawner, 
             GameInputActions inputActions
             )
         {
             _loadingScreen = loadingScreen;
-            _trackCubesSpawner = trackCubesSpawner;
             _trackSpawner = trackSpawner;
             _inputActions = inputActions;
         }
 
-        public void Initialize()
+        public void PostInitialize()
         {
-            _trackCubesSpawner.Initialize();
-            _trackSpawner.Initialize();
+            _trackSpawner.SpawnInitialTracks();
             _loadingScreen.Hide();
             _inputActions.Enable();
         }

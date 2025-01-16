@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Code.Core.Pools.Poolable;
 using Code.Gameplay.Cubes;
 using UnityEngine;
 
 namespace Code.Gameplay.Tracks
 {
-    public class Track : MonoBehaviour
+    public class Track : PoolableBase
     {
         [field: SerializeField] public Cube CubePrefab { get; private set; }
         [SerializeField] private CubeSpawnPoint[] _cubeSpawnPoints;
@@ -19,6 +20,9 @@ namespace Code.Gameplay.Tracks
         }
 
         private readonly List<Cube> _attachedCubes = new List<Cube>();
+
+        private void Awake() => 
+            _cubeSpawnPoints ??= Array.Empty<CubeSpawnPoint>();
 
         #if UNITY_EDITOR
         public void SetCubeSpawnPoints(CubeSpawnPoint[] spawnPoints) => 

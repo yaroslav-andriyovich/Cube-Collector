@@ -18,7 +18,7 @@ namespace Code.Core.Services.StaticData
         public CameraShakeConfig GetCameraShake() => 
             _cameraShakeShakeConfig;
         
-        public TrackSpawningConfig GetTrackSpawner() => 
+        public TrackSpawningConfig GetForTracks() => 
             _trackSpawningConfig;
     }
 }

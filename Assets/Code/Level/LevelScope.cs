@@ -15,7 +15,6 @@ namespace Code.Level
     {
         [SerializeField] private CameraProvider _cameraProvider;
         [SerializeField] private Player _player;
-        [SerializeField] private TrackSpawner _trackSpawner;
         [SerializeField] private UIInstaller _uiInstaller;
 
         protected override void Configure(IContainerBuilder builder)
@@ -30,7 +29,7 @@ namespace Code.Level
 
             builder.RegisterComponent(_player);
 
-            builder.RegisterComponent(_trackSpawner);
+            builder.Register<TrackSpawner>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<TrackCubesSpawner>(Lifetime.Singleton).AsImplementedInterfaces().AsSelf();
             builder.Register<LostCubeHandler>(Lifetime.Singleton).AsImplementedInterfaces();
 

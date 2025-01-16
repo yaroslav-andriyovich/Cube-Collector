@@ -79,7 +79,7 @@ namespace Code.Core.Pools
 
         private void CreateObjectsParent()
         {
-            GameObject gameObject = new GameObject("[Pool] " + typeof(T).Name);
+            GameObject gameObject = new GameObject("[Pool] " + typeof(T).Name + $" ({_poolableFactory.Prefab.name})");
 
             ObjectsParent = gameObject.transform;
         }

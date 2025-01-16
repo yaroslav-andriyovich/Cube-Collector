@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Code.Core.Services.Pools;
 using Code.Core.Services.StaticData;
@@ -13,10 +12,8 @@ using Random = UnityEngine.Random;
 
 namespace Code.Gameplay.Systems
 {
-    public class TrackSpawner : MonoBehaviour
+    public class TrackSpawner : IInitializable
     {
-        [SerializeField] private Track _playerTrackInstance;
-
         public event Action<Track> Spawned;
         public event Action<Track> DeSpawned;
 
@@ -28,74 +25,60 @@ namespace Code.Gameplay.Systems
         private List<Track> _spawned;
 
         private PoolService _poolService;
-        private IObjectResolver _objectResolver;
 
         [Inject]
-        private void Construct(ConfigService configService, PoolService poolService, IObjectResolver objectResolver)
+        private void Construct(ConfigService configService, PoolService poolService)
         {
             _configService = configService;
             _poolService = poolService;
-            _objectResolver = objectResolver;
+            _spawned = new List<Track>();
         }
 
-        public void Initialize()
+        public void Initialize() => 
+            _config = _configService.GetForTracks();
+
+        public void SpawnInitialTracks()
         {
-            _config = _configService.GetTrackSpawner();
+            if (_spawned.Count > 0)
+                throw new InvalidOperationException("[Track Spawner] The initial tracks had already been created");
             
-            _spawned = new List<Track>
-            {
-                _playerTrackInstance
-            };
+            SpawnPlayerStartTrack();
 
-            SubscribeInitialTracks();
-            InstantiateInitialTracks();
+            for (int i = 0; i < _config.initialCount; i++)
+                SpawnTrack(GetRandomPrefab(), GetNextPosition(), LastSpawned.transform.rotation);
         }
 
-        public void GenerateNext()
+        public void SpawnNext()
         {
-            Vector3 position = GetNextPosition();
-            Track spawnedTrack = InstantiateRandomPrefab(position);
+            Track spawnedTrack = SpawnTrack(GetRandomPrefab(), GetNextPosition(), LastSpawned.transform.rotation);
 
             AnimateLift(spawnedTrack);
         }
 
-        private void SubscribeInitialTracks()
+        private void SpawnPlayerStartTrack() => 
+            SpawnTrack(_config.initialTrackPrefab, _config.initialTrackPosition, _config.initialTrackRotation);
+
+        private Track SpawnTrack(Track prefab, Vector3 at, Quaternion rotation)
         {
-            foreach (Track track in _spawned)
-                track.NextTrackTrigger += GenerateNext;
-        }
-        
-        private void UnSubscribeTrack(Track track) => 
-            track.NextTrackTrigger -= GenerateNext;
+            Track track = _poolService.Spawn(prefab, at, rotation);
 
-        private void InstantiateInitialTracks()
-        {
-            for (int i = 0; i < _config.initialCount; i++)
-            {
-                Vector3 position = LastSpawned.transform.position;
+            RegisterTrack(track);
 
-                position = ShiftPositionForward(position);
-
-                InstantiateRandomPrefab(position);
-            }
-        }
-
-        private Vector3 ShiftPositionForward(Vector3 position)
-        {
-            position.z += _config.forwardPositionShift;
-            return position;
-        }
-
-        private Track InstantiateRandomPrefab(Vector3 at)
-        {
-            Track prefab = GetRandomPrefab();
-            Track track = _objectResolver.Instantiate(prefab, at, Quaternion.identity);
-
-            _spawned.Add(track);
-            track.NextTrackTrigger += GenerateNext;
-            Spawned?.Invoke(track);
             return track;
         }
+
+        private void RegisterTrack(Track track)
+        {
+            track.NextTrackTrigger += SpawnNext;
+            _spawned.Add(track);
+            Spawned?.Invoke(track);
+        }
+
+        private void UnRegisterTrack(Track track) => 
+            track.NextTrackTrigger -= SpawnNext;
+
+        private Vector3 GetNextPosition() => 
+            ShiftPositionForward(LastSpawned.transform.position);
 
         private Track GetRandomPrefab()
         {
@@ -107,14 +90,23 @@ namespace Code.Gameplay.Systems
             return randomTrack;
         }
 
-        private Vector3 GetNextPosition()
+        private Vector3 ShiftPositionForward(Vector3 position)
         {
-            Vector3 lastTrackPosition = LastSpawned.transform.position;
+            position.z += _config.forwardPositionShift;
+            return position;
+        }
 
-            lastTrackPosition = ShiftPositionForward(lastTrackPosition);
-            lastTrackPosition = ShiftPositionDown(lastTrackPosition);
+        private void AnimateLift(Track track)
+        {
+            Vector3 targetPosition = track.transform.position;
 
-            return lastTrackPosition;
+            track.transform.position = ShiftPositionDown(targetPosition);
+            
+            track.transform
+                .DOMoveY(targetPosition.y, _config.animationDuration)
+                .SetEase(_config.animationEase)
+                .SetLink(track.gameObject)
+                .OnComplete(CollectGarbage);
         }
 
         private Vector3 ShiftPositionDown(Vector3 position)
@@ -123,36 +115,17 @@ namespace Code.Gameplay.Systems
             return position;
         }
 
-        private void AnimateLift(Track track)
-        {
-            float targetPosition = FirstSpawned.transform.position.y;
-
-            track.transform
-                .DOMoveY(targetPosition, _config.animationDuration)
-                .SetEase(_config.animationEase)
-                .SetLink(track.gameObject)
-                .OnComplete(CollectGarbage);
-        }
-
         private void CollectGarbage() => 
-            StartCoroutine(GarbageCollectionRoutine());
-
-        private IEnumerator GarbageCollectionRoutine()
-        {
-            yield return new WaitForSeconds(1f);
-            
-            DestroyTraveledTrack();
-        }
+            DOVirtual.DelayedCall(1f, DestroyTraveledTrack);
 
         private void DestroyTraveledTrack()
         {
             Track traveledTrack = FirstSpawned;
 
-            UnSubscribeTrack(traveledTrack);
-
+            UnRegisterTrack(traveledTrack);
             _spawned.Remove(traveledTrack);
             DeSpawned?.Invoke(traveledTrack);
-            Destroy(traveledTrack.gameObject);
+            traveledTrack.Release();
         }
     }
 }

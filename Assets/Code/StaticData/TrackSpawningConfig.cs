@@ -8,7 +8,12 @@ namespace Code.StaticData
     [CreateAssetMenu(fileName = "TrackGenerationConfig", menuName = "StaticData/Track Spawning")]
     public class TrackSpawningConfig : ScriptableObject
     {
-        [Header("Initial")]
+        [Header("Initial track")]
+        public Track initialTrackPrefab;
+        public Vector3 initialTrackPosition;
+        public Quaternion initialTrackRotation;
+        
+        [Header("Track variants")]
         public Cube cubePrefab;
         public Track[] trackVariants;
         [Min(0)] public int initialCount;

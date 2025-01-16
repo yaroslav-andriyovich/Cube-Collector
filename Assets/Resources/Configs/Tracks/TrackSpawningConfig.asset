@@ -12,6 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf7aa5cae0884139a21e533c844deada, type: 3}
   m_Name: TrackSpawningConfig
   m_EditorClassIdentifier: 
+  initialTrackPrefab: {fileID: 5473280008258939467, guid: f9bb063332889b448a28525a1e8031a8,
+    type: 3}
+  initialTrackPosition: {x: 0, y: 0, z: 0}
+  initialTrackRotation: {x: 0, y: 0, z: 0, w: 0}
   cubePrefab: {fileID: 1260764138389141569, guid: 301b9405d8c909a428728d02529b4021,
     type: 3}
   trackVariants:

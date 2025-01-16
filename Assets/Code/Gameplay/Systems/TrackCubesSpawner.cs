@@ -5,10 +5,11 @@ using Code.Core.Services.StaticData;
 using Code.Gameplay.Cubes;
 using Code.Gameplay.Tracks;
 using UnityEngine;
+using VContainer.Unity;
 
 namespace Code.Gameplay.Systems
 {
-    public class TrackCubesSpawner : IDisposable
+    public class TrackCubesSpawner : IInitializable, IDisposable
     {
         private readonly TrackSpawner _trackSpawner;
         private readonly PoolService _poolService;
@@ -29,7 +30,7 @@ namespace Code.Gameplay.Systems
             _trackSpawner.Spawned += OnTrackSpawned;
             _trackSpawner.DeSpawned += OnTrackDeSpawned;
             
-            _poolService.Warmup(_configService.GetTrackSpawner().cubePrefab, 20);
+            _poolService.Warmup(_configService.GetForTracks().cubePrefab, 20);
         }
 
         public void Dispose()
