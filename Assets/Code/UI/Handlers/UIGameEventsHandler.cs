@@ -1,18 +1,21 @@
 using System;
 using Code.Gameplay;
+using Code.UI.Screens;
 using VContainer.Unity;
 
-namespace Code.UI
+namespace Code.UI.Handlers
 {
-    public class UIWindowMediator : IInitializable, IDisposable
+    public class UIGameEventsHandler : IInitializable, IDisposable
     {
-        private readonly UIView _uiView;
         private readonly IGameEventSender _gameEventSender;
+        private readonly StartScreen _startScreen;
+        private readonly EndScreen _endScreen;
 
-        public UIWindowMediator(UIView uiView, IGameEventSender gameEventSender)
+        public UIGameEventsHandler(IGameEventSender gameEventSender, StartScreen startScreen, EndScreen endScreen)
         {
-            _uiView = uiView;
             _gameEventSender = gameEventSender;
+            _startScreen = startScreen;
+            _endScreen = endScreen;
         }
 
         public void Initialize()
@@ -28,9 +31,9 @@ namespace Code.UI
         }
 
         private void OnGameStarted() => 
-            _uiView.HideStartWindow();
+            _startScreen.Hide();
 
         private void OnGameEnded() => 
-            _uiView.ShowRestartWindow();
+            _endScreen.Show();
     }
 }

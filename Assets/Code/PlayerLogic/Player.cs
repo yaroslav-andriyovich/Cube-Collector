@@ -21,6 +21,7 @@ namespace Code.PlayerLogic
         [SerializeField] private CharacterRagdoll _characterRagdoll;
         [SerializeField] private TrailEffect _trailEffect;
 
+        public event Action CubeCollected;
         public event Action<Cube> CubeLost;
 
         private bool _isDead;
@@ -32,7 +33,7 @@ namespace Code.PlayerLogic
         {
             _dangerousCollisionTrigger.Collided += Die;
             _cubeHolder.Emptied += Die;
-            _cubeHolder.NewPlayerPosition += _characterJump.Jump;
+            _cubeHolder.NewPlayerPosition += OnCubeCollected;
             _cubeHolder.CubeCollidedWithWall += OnCubeCollidedWithWall;
         }
 
@@ -40,7 +41,7 @@ namespace Code.PlayerLogic
         {
             _dangerousCollisionTrigger.Collided -= Die;
             _cubeHolder.Emptied -= Die;
-            _cubeHolder.NewPlayerPosition -= _characterJump.Jump;
+            _cubeHolder.NewPlayerPosition -= OnCubeCollected;
             _cubeHolder.CubeCollidedWithWall -= OnCubeCollidedWithWall;
             
             _gameControl.GameStarted -= OnGameStarted;
@@ -85,6 +86,12 @@ namespace Code.PlayerLogic
             _gameControl.GameEnded -= OnGameEnded;
             
             _movement.Disable();
+        }
+        
+        private void OnCubeCollected(Vector3 newCharacterPosition)
+        {
+            _characterJump.Jump(newCharacterPosition);
+            CubeCollected?.Invoke();
         }
 
         private void OnCubeCollidedWithWall(Cube cube)

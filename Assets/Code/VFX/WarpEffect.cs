@@ -1,7 +1,4 @@
-using Code.Gameplay;
-using Code.PlayerLogic;
 using UnityEngine;
-using VContainer;
 
 namespace Code.VFX
 {
@@ -10,35 +7,33 @@ namespace Code.VFX
         [SerializeField] private Vector3 _playerOffset;
         [SerializeField] private ParticleSystem _particle;
         
-        private IGameEventSender _gameEventSender;
         private Transform _playerTransform;
 
-        [Inject]
-        private void Construct(IGameEventSender gameEventSender, Player player)
+        private void LateUpdate()
         {
-            _gameEventSender = gameEventSender;
-            _playerTransform = player.transform;
-
-            _gameEventSender.GameStarted += _particle.Play;
-            _gameEventSender.GameEnded += _particle.Stop;
-        }
-
-        private void OnDestroy()
-        {
-            _gameEventSender.GameStarted -= _particle.Play;
-            _gameEventSender.GameEnded -= _particle.Stop;
-        }
-        
-        private void LateUpdate() => 
-            MoveToPlayer();
-        
-        private void MoveToPlayer()
-        {
+            if (_playerTransform is null)
+                return;
+            
             Vector3 position = _playerOffset;
 
             position.z += _playerTransform.position.z;
 
             transform.position = position;
+        }
+
+        public void SetTarget(Transform target) => 
+            _playerTransform = target;
+
+        public void Enable()
+        {
+            enabled = true;
+            _particle.Play();
+        }
+
+        public void Disable()
+        {
+            enabled = false;
+            _particle.Stop();
         }
     }
 }

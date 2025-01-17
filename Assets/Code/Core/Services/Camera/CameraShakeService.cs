@@ -1,6 +1,5 @@
 using System;
 using Cinemachine;
-using Code.Core.CameraManagement;
 using Code.Core.Services.StaticData;
 using Code.StaticData;
 using UnityEngine;
@@ -10,7 +9,7 @@ namespace Code.Core.Services.Camera
 {
     public class CameraShakeService : IInitializable, ITickable
     {
-        private readonly CameraProvider _cameraProvider;
+        private readonly CinemachineVirtualCamera _camera;
         private readonly ConfigService _configService;
 
         private CinemachineBasicMultiChannelPerlin _cinemachinePerlin;
@@ -24,15 +23,15 @@ namespace Code.Core.Services.Camera
         private float _startingAmplitude;
         private float _startingFrequency;
 
-        public CameraShakeService(CameraProvider cameraProvider, ConfigService configService)
+        public CameraShakeService(CinemachineVirtualCamera camera, ConfigService configService)
         {
-            _cameraProvider = cameraProvider;
+            _camera = camera;
             _configService = configService;
         }
 
         public void Initialize()
         {
-            _cinemachinePerlin = _cameraProvider.Camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+            _cinemachinePerlin = _camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
             _shakeConfig = _configService.GetCameraShake();
             
             _isInitialized = true;

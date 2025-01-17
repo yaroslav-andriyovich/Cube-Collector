@@ -1,4 +1,6 @@
 using Code.Core.SceneManagement;
+using Code.Core.Services.Pause;
+using Code.Core.Services.Pools;
 using Code.Core.Services.StaticData;
 using Code.Core.Services.Vibration;
 using UnityEngine;
@@ -19,6 +21,8 @@ namespace Code.Core.DI
             builder.RegisterComponentInNewPrefab(_loadingScreenPrefab, Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<SceneLoader>(Lifetime.Singleton);
             builder.Register<GameInputActions>(Lifetime.Singleton);
+            builder.Register<PoolService>(Lifetime.Scoped);
+            builder.Register<PauseService>(Lifetime.Singleton).AsImplementedInterfaces();
             builder.Register<VibrationService>(Lifetime.Singleton).AsImplementedInterfaces();
         }
     }
