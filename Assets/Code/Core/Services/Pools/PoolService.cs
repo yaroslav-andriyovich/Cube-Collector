@@ -12,7 +12,6 @@ namespace Code.Core.Services.Pools
 {
     public class PoolService
     {
-        //private readonly Dictionary<Type, Dictionary<GameObject, object>> _pools;
         private readonly Dictionary<Type, Dictionary<int, object>> _pools;
         private readonly IObjectResolver _objectResolver;
 
@@ -20,7 +19,6 @@ namespace Code.Core.Services.Pools
 
         public PoolService(IObjectResolver objectResolver)
         {
-            //_pools = new Dictionary<Type, Dictionary<GameObject, object>>();
             _pools = new Dictionary<Type, Dictionary<int, object>>();
             _objectResolver = objectResolver;
             
@@ -85,7 +83,6 @@ namespace Code.Core.Services.Pools
 
             if (!IsTypeRegistered(type))
             {
-                //_pools[type] = new Dictionary<GameObject, object>();
                 _pools[type] = new Dictionary<int, object>();
             }
 
@@ -95,7 +92,6 @@ namespace Code.Core.Services.Pools
             MonoPool<T> pool = new MonoPool<T>(poolableFactory, maxSize, autoExpand);
 
             pool.ObjectsParent.SetParent(_monoContainer);
-            //_pools[type][gameObject] = pool;
             _pools[type][gameObject.GetInstanceID()] = pool;
 
             return pool;
@@ -108,7 +104,6 @@ namespace Code.Core.Services.Pools
 
             if (IsPoolCreated(prefab, type))
             {
-                //pool = (MonoPool<T>)_pools[type][gameObject];
                 pool = (MonoPool<T>)_pools[type][gameObject.GetInstanceID()];
                 return true;
             }
@@ -141,7 +136,6 @@ namespace Code.Core.Services.Pools
 
         private bool IsObjectRegisteredByType(GameObject gameObject, Type type)
         {
-            //return _pools[type].ContainsKey(gameObject);
             return _pools[type].ContainsKey(gameObject.GetInstanceID());
         }
 
