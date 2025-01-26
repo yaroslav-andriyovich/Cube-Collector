@@ -1,15 +1,13 @@
 # Cube Collector
-<hr>
 
 [Full Demo](https://youtu.be/pPi6AiqY0v0)
+
 ![Demo](./ReadmeResources/Demo.gif)
 
 ## My simple test case has been reworked with the VContainer and game architecture
 Unity: [Input](https://docs.unity3d.com/Packages/com.unity.inputsystem@1.12/manual/index.html) / [Cinemachine](https://docs.unity3d.com/Packages/com.unity.cinemachine@3.1/manual/index.html) / [Ragdoll](https://docs.unity3d.com/Manual/wizard-RagdollWizard.html) / [Physics](https://docs.unity3d.com/Manual/PhysicsOverview.html) / [Animation](https://docs.unity3d.com/Manual/AnimationSection.html) / [Particle](https://learn.unity.com/tutorial/introduction-to-particle-systems#6025fdd9edbc2a112d4f0135) / [Scriptable Object](https://docs.unity3d.com/Manual/class-ScriptableObject.html) / [Editor Scripts](https://learn.unity.com/tutorial/editor-scripting#)
 
 Plugins: [DOTween](https://dotween.demigiant.com/) / [VContainer](https://vcontainer.hadashikick.jp/) / [UniTask](https://github.com/Cysharp/UniTask) / [Vibration](https://github.com/BenoitFreslon/Vibration)
-
-<hr>
 
 ## Lifecycle Base
 ### Core
