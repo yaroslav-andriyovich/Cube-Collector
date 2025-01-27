@@ -1,19 +1,19 @@
 using System;
-using VContainer.Unity;
 
 namespace Code.Core.Services.Vibration
 {
     public class VibrationService : IVibrationService, IDisposable
     {
         private bool _enabled = true;
-        private bool _hasVibrator;
+        private bool _initialized;
         
         public void Initialize()
         {
-            if (!CheckVibratorAvailability())
+            if (_initialized)
                 return;
             
             global::Vibration.Init();
+            _initialized = true;
         }
 
         public void Dispose() => 
@@ -21,7 +21,7 @@ namespace Code.Core.Services.Vibration
 
         public void EnableVibration()
         {
-            if (!_hasVibrator)
+            if (!_initialized)
                 return;
             
             _enabled = true;
@@ -32,7 +32,7 @@ namespace Code.Core.Services.Vibration
 
         public void Stop()
         {
-            if (!_hasVibrator)
+            if (!_initialized)
                 return;
             
             global::Vibration.CancelAndroid();
@@ -40,17 +40,10 @@ namespace Code.Core.Services.Vibration
 
         public void Vibrate(int time)
         {
-            if (!_enabled)
+            if (!_initialized || !_enabled)
                 return;
             
             global::Vibration.VibrateAndroid(Convert.ToInt64(time));
-        }
-
-        private bool CheckVibratorAvailability()
-        {
-            _hasVibrator = global::Vibration.HasVibrator();
-
-            return _hasVibrator;
         }
     }
 }
